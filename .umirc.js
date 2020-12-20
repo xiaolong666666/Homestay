@@ -3,11 +3,13 @@
 export default {
   treeShaking: true,
   routes: [
+    { path: '/sign_in', title: '登录 - 恬逸小岛', component: '../pages/sign' },
+    { path: '/sign_up', title: '注册 - 恬逸小岛', component: '../pages/sign' },
     {
       path: '/',
       component: '../layouts/index',
       routes: [
-        { path: '/', component: '../pages/index' }
+        { path: '/', title: '恬逸小岛 - 小岛出租房源_小岛优质房源_小岛安家信息', component: '../pages/index' }
       ]
     }
   ],
@@ -17,8 +19,8 @@ export default {
       antd: true,
       dva: true,
       dynamicImport: { webpackChunkName: true },
-      links: [{ rel: 'icon', href: 'assets/favicon.ico' }],
-      title: '恬逸小岛-体验风土，感受人情，恬静舒适',
+      links: [{ rel: 'icon', href: '<%= PUBLIC_PATH %>assets/imgs/favicon.ico' }],
+      title: '恬逸小岛 - 小岛出租房源_小岛优质房源_小岛安家信息',
       dll: true,
       locale: {
         enable: true,

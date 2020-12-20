@@ -1,12 +1,15 @@
-import styles from './index.css';
+import { Fragment } from 'react'
+import Header from './header'
+import Footer from './footer'
 
 function BasicLayout(props) {
   return (
-    <div className={styles.normal}>
-      <h1 className={styles.title}>Yay! Welcome to umi!</h1>
+    <Fragment>
+      <Header />
       {props.children}
-    </div>
-  );
+      <Footer />
+    </Fragment>
+  )
 }
 
 export default BasicLayout;
