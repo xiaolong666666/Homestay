@@ -14,10 +14,13 @@ const Banner = () => {
     return (
         <div className={HomeStyle.banner}>
             <div className={HomeStyle.banner_carousel}>
-                <Carousel autoplay>
+                <Carousel autoplay dots={false}>
                     {
                         carouselFlow.map(item => (
-                            <div className={`${HomeStyle.banner_carousel_item} ${HomeStyle[item.carouselStyle]}`}>
+                            <div
+                                key={item.carouselStyle}
+                                className={`${HomeStyle.banner_carousel_item} ${HomeStyle[item.carouselStyle]}`}
+                            >
                                 <div className={HomeStyle.banner_carousel_introduce}>{item.introduce}</div>
                             </div>
                         ))

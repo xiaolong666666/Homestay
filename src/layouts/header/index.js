@@ -50,6 +50,9 @@ const Header = ({ user: { isLoginFlag, isUserTips }, header: { isNoticeFlag, isM
             <div className={HeaderStyle.main}>
                 {/* logo */}
                 <Link to='/'><div className={HeaderStyle.logo} /></Link>
+                <Link to='/homestay/solo'><div className={HeaderStyle.homestay_type}>单人公寓</div></Link>
+                <Link to='/homestay/double'><div className={HeaderStyle.homestay_type}>双人合租</div></Link>
+                <Link to='/homestay/multiplayer'><div className={HeaderStyle.homestay_type}>多人合租</div></Link>
 
                 {/* 手机端 */}
                 <div
@@ -92,7 +95,7 @@ const Header = ({ user: { isLoginFlag, isUserTips }, header: { isNoticeFlag, isM
                                         className={HeaderStyle.user_avatar_operate}
                                     >
                                         <ul>
-                                            <li>个人中心</li>
+                                            <li><Link to='/user/xxx/123'>个人中心</Link></li>
                                             <li>退出登录</li>
                                         </ul>
                                     </div>

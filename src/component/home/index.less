@@ -1,0 +1,404 @@
+@font-color: #333;
+@font-weight: 800;
+
+.landlord_avatar_wrapper_rank(@color) {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+
+    &::after {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        content: '\e60f';
+        color: @color;
+        font-size: 16px;
+    }
+
+    .landlord_avatar {
+        width: 36px;
+        height: 36px;
+        border: 2px solid #F87A54;
+        border-radius: 50%;
+    }
+}
+
+.landlord_avatar_wrapper() {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+
+    .landlord_avatar {
+        width: 36px;
+        height: 36px;
+        border: 2px solid #F87A54;
+        border-radius: 50%;
+    }
+}
+
+.cursor() {
+    cursor: pointer;
+}
+
+.banner {
+    position: relative;
+    height: 650px;
+    background: url('@/assets/imgs/banner/banner.jpg') 50% no-repeat;
+    background-size: auto 100%;
+
+    .banner_carousel {
+        position: absolute;
+        top: 8%;
+        left: 18%;
+        width: 18%;
+        height: 86%;
+        padding: 16px 11px 16px 18px;
+        border-radius: 5%;
+
+        .banner_carousel_item {
+            position: relative;
+            width: 100%;
+            height: 530px;
+            border-radius: 5%;
+            background-size: auto 100%;
+
+            &.item0 {
+                background: url('@/assets/imgs/banner/banner_carousel_0.png') no-repeat;
+            }
+            &.item1 {
+                background: url('@/assets/imgs/banner/banner_carousel_1.png') no-repeat;
+            }
+            &.item2 {
+                background: url('@/assets/imgs/banner/banner_carousel_2.png') no-repeat;
+            }
+            &.item3 {
+                background: url('@/assets/imgs/banner/banner_carousel_3.png') no-repeat;
+            }
+            &.item4 {
+                background: url('@/assets/imgs/banner/banner_carousel_4.png') no-repeat;
+            }
+            &.item5 {
+                background: url('@/assets/imgs/banner/banner_carousel_5.png') no-repeat;
+            }
+
+            .banner_carousel_introduce {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 4%;
+                padding: 6px 12px;
+                background-color: #ccc;
+                opacity: 0.6;
+                color: #333;
+                letter-spacing: 2px;
+                text-align: center;
+            }
+        }
+
+    }
+
+    .banner_carousel_wrapper {
+        position: absolute;
+        top: 5%;
+        left: 15%;
+        width: 23%;
+        height: 650px;
+        background: url('@/assets/imgs/banner/banner_carousel_bg.png') no-repeat;
+        background-size: auto 100%;
+    }
+
+    .banner_main {
+        position: absolute;
+        top: 12%;
+        left: 50%;
+        text-align: center;
+
+        .banner_title {
+            font-size: 66px;
+            line-height: 92px;
+            color: #fff;
+            letter-spacing: .82px;
+            text-shadow: 0 4px 10px rgba(22,28,41,.3);
+            padding: 20px 0;
+            font-weight: @font-weight;
+        }
+
+        .banner_advantages {
+            margin: 28px auto;
+            color: #F4F4F6;
+            font-size: 18px;
+            letter-spacing: 10px;
+        }
+
+        .banner_recommended {
+            margin: 32px 20px;
+            padding: 12px 8px;
+            border-radius: 5px;
+            background: #EBEBEB;
+            color: #394744;
+            font-size: 16px;
+            letter-spacing: 4px;
+            font-weight: @font-weight;
+            opacity: 0.5;
+        }
+
+        .banner_propaganda {
+            margin: 24px 4px;
+            color: #FCFDFB;
+            font-size: 32px;
+            letter-spacing: 6px;
+            font-weight: @font-weight;
+        }
+    }
+}
+
+.main {
+    overflow: hidden;
+    width: 80%;
+    height: 800px;
+    margin: 0 auto;
+    background: #ccc;
+    &>div {
+        padding: 16px;
+    }
+
+    .main_left {
+        float: left;
+        width: 75%;
+        background: red;
+    }
+
+    .main_right {
+        float: right;
+        width: 25%;
+        background: chartreuse;
+    }
+}
+
+.frame {
+    margin: 0 0 16px;
+
+    .frame_title() {
+        padding: 16px;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 18px;
+        font-weight: @font-weight;
+        line-height: 24px;
+    }
+
+    .frame_title_class {
+        .frame_title();
+        background-image: radial-gradient(circle at 50% 3%,#f07a56,#f55727);
+    }
+
+    .frame_title_rank {
+        .frame_title();
+        background-image: radial-gradient(circle at 50% -6%,#ffb83d 2%,#f59b00);
+        background-image: radial-gradient(circle at 50% -45%,#53a7f5,#397bee);
+    }
+}
+
+.tenant_entrance {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    >a {
+        position: relative;
+        margin: 6px 0;
+        padding: 4px 16px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        border-radius: 8px;
+        &.li0 {
+            background: #F4E0BD;
+            color: #BF903C;
+        }
+        &.li1 {
+            background: #C1E4DE;
+            color: #5F9891;
+        }
+        &.li2 {
+            background: #B7D3EC;
+            color: #6C8EC1;
+        }
+
+        .entrance_title {
+            font-family: 'kaiti';
+            font-size: 24px;
+            line-height: 1.5em;
+
+            span {
+                position: absolute;
+                top: 14px;
+                left: 44%;
+                display: inline-block;
+                font-size: 0.5em;
+                font-weight: @font-weight;
+                line-height: 1.5em;
+            }
+        }
+    }
+
+    .icon_tenant {
+        font-size: 36px;
+    }
+}
+
+.landlord_ranking {
+
+    >li {
+        position: relative;
+        margin: 6px 0;
+        padding: 12px 16px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        border-radius: 8px;
+        background: orchid;
+
+        .landlord_avatar_wrapper0 {
+            .landlord_avatar_wrapper_rank(#FF6314)
+        }
+
+        .landlord_avatar_wrapper1 {
+            .landlord_avatar_wrapper_rank(#FFBD24)
+        }
+
+        .landlord_avatar_wrapper2 {
+            .landlord_avatar_wrapper_rank(#4C8DFC)
+        }
+
+        .landlord_avatar_wrapper {
+            .landlord_avatar_wrapper()
+        }
+
+        .landlord_info {
+            width: 60%;
+            text-align: left;
+
+            .info_nickname {
+                margin: 0 0 6px;
+                color: @font-color;
+            }
+        }
+
+        .landlord_rank {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            color: #FFF;
+            font-size: 12px;
+            text-align: center;
+            background: url('@/assets/imgs/landlord/rank_bg.png') no-repeat;
+            background-size: contain;
+
+            &.rank0 {
+                background: url('@/assets/imgs/landlord/rank_bg0.png') no-repeat;
+                background-size: contain;
+            }
+            &.rank1 {
+                background: url('@/assets/imgs/landlord/rank_bg1.png') no-repeat;
+                background-size: contain;
+            }
+            &.rank2 {
+                background: url('@/assets/imgs/landlord/rank_bg2.png') no-repeat;
+                background-size: contain;
+            }
+        }
+    }
+}
+
+.advantage {
+    padding: 16px;
+    background: #EFE8E3;
+    background: #3CA0D1;
+
+    .advantage_title {
+        width: 80%;
+        margin: 12px auto 18px;
+        color: #FFF;
+        font-size: 28px;
+        text-align: center;
+        letter-spacing: 4px;
+    }
+
+    .advantage_boxs {
+        display: flex;
+        justify-content: center;
+
+        .advantage_box {
+            position: relative;
+            width: 20%;
+            min-height: 170px;
+            margin: 0 10px;
+            text-align: center;
+            .cursor();
+
+            &:hover {
+                box-shadow: rgb(24, 119, 166) 0px 0px 5px 0px;
+            }
+
+            .advantage_identification {
+                padding-top: 10px;
+            }
+
+            h3 {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                margin: 18px auto;
+                color: #FFF;
+                font-size: 18px;
+                text-align: center;
+            }
+        }
+    }
+}
+
+.advantage_tip {
+    overflow: hidden;
+
+    .advantage_tip_title {
+        float: left;
+        width: 28px;
+        margin:0 6px;
+        padding: 50px 0;
+        color: #D5D5D5;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    img {
+        float: left;
+        width: 236px;
+    }
+
+    .advantage_tip_main {
+        float: right;
+        width: calc(100% - 276px);
+        padding: 0 22px;        
+
+        h4 {
+            margin: 80px 16px 40px;
+            color: #777;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        p {
+            margin: 8px 0;
+        }
+    }
+}
+
+:global {
+    .ant-modal-body {
+        padding: 0;
+    }
+}
