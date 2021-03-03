@@ -2,85 +2,70 @@ import React, { Component } from 'react';
 import { Form, Input, Icon, Button, message } from 'antd';
 import { connect } from 'dva'
 import router from 'umi/router'
-import axios from 'axios'
+import SigninStyle from './index.less'
 
+const formItemLayout = {
+    labelCol: {
+        sm: { span: 6 },
+    },
+    wrapperCol: {
+        sm: { span: 16 },
+    },
+};
+const buttonFormItemLayout = {
+    wrapperCol: {
+        sm: {
+            span: 14,
+            offset: 8,
+        },
+    },
+};
 class LoginForm extends Component {
-    state = {
-        autoCompleteResult: [],
-    };
 
+    // 验证手机号
+    validatePhoneNumber = (rule, value, callback) => {
+        if (value && !(/^1[345678]\d{9}$/.test(value))) {
+            callback('请输入正确的手机号！')
+        } else {
+            callback()
+        }
+    }
+
+    // 登录--发送数据
     handleSubmit = e => {
+        const { dispatch, form: { validateFieldsAndScroll } } = this.props
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        validateFieldsAndScroll((err, values) => {
             if (!err) {
                 const params = new URLSearchParams();
-                params.append('username', values.username);
+                params.append('phone', values.phone);
                 params.append('password', values.password);
-                axios.post('/api/user/login', params)
-                    .then(res => {
-                        if (res.statusText === 'OK') {
-                            const { dispatch } = this.props
-                            message.success('恭喜你，登录成功!');
-                            dispatch({ type: 'user/onLine', user: res.data })
-                            localStorage.setItem('user', JSON.stringify(res.data))
-                            router.push('/apparel')
-                        } else {
-                            message.error('很遗憾，登录失败！')
-                        }
-                    })
-                    .catch(e => {
-                        message.error('很遗憾，登录失败！')
-                    })
+                dispatch({ type: 'user/user_sign_in', payload: params }).then(res => {
+                    const { code, message: tips } = res
+                    code ? message.success(tips) : message.error(tips)
+                    code && router.push('/')
+                })
             }
         });
-    };
-
-    compareToFirstPassword = (rule, value, callback) => {
-        const { form } = this.props;
-        if (value && value !== form.getFieldValue('password')) {
-            callback('Two passwords that you enter is inconsistent!');
-        } else {
-            callback();
-        }
-    };
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
 
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const buttonFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 14,
-                    offset: 8,
-                },
-            },
-        };
-
         return (
             <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                <Form.Item label="用户名">
-                    {getFieldDecorator('username', {
+                <Form.Item label="手机号">
+                    {getFieldDecorator('phone', {
                         rules: [
                             {
                                 required: true,
-                                message: '请输入用户名!',
+                                message: '请输入手机号!',
                             },
+                            {
+                                validator: this.validatePhoneNumber,
+                            }
                         ],
-                    })(<Input prefix={<Icon type="user" />} autoComplete="off" />)}
+                    })(<Input prefix={<Icon type="phone" />} autoComplete="off" />)}
                 </Form.Item>
                 <Form.Item label="密码">
                     {getFieldDecorator('password', {
@@ -93,7 +78,7 @@ class LoginForm extends Component {
                     })(<Input.Password prefix={<Icon type="lock" />} />)}
                 </Form.Item>
                 <Form.Item {...buttonFormItemLayout}>
-                    <Button type="primary" htmlType="submit" style={{ width: '160px', height: '36px' }}>
+                    <Button type="primary" htmlType="submit" className={SigninStyle.login_btn}>
                         登录
                     </Button>
                 </Form.Item>

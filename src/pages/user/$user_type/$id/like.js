@@ -1,11 +1,11 @@
 import React from 'react';
 
-const index = () => {
+const like = () => {
     return (
         <div>
-            123
+            我的点赞
         </div>
     );
 };
 
-export default index;
+export default like;

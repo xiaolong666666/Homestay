@@ -1,11 +1,11 @@
 import React from 'react';
 
-const index = () => {
+const favorites = () => {
     return (
         <div>
-            123
+            favorites
         </div>
     );
 };
 
-export default index;
+export default favorites;

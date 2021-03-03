@@ -1,11 +1,11 @@
 import React from 'react';
 
-const index = () => {
+const reserve = () => {
     return (
         <div>
-            123
+            reserve
         </div>
     );
 };
 
-export default index;
+export default reserve;

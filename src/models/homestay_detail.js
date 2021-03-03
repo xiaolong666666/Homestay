@@ -9,15 +9,29 @@ export default {
         like: false,
         favorites: false,
         comment: [],
+        current: 2,
+        pageSize: 5,
+        total: 0,
         landlord_info: {
             nickname: 'gril呵呵',
             face: 'https://image.xiaozhustatic1.com/21/5,20,0,41,64,329,329,6c09f465.jpg',
             gender: 1,
             isVerified: true,
         },
-        current: 2,
-        pageSize: 5,
-        total: 0,
+        landlord_house: [
+            {
+                pic: "https://z1.muscache.cn/im/pictures/f7e0027c-741f-48ea-ae64-747d15307dee.jpg?aki_policy=xx_large",
+                price: '1820'
+            },
+            {
+                pic: "https://z1.muscache.cn/im/pictures/f7e0027c-741f-48ea-ae64-747d15307dee.jpg?aki_policy=xx_large",
+                price: '1820'
+            },
+            {
+                pic: "https://z1.muscache.cn/im/pictures/f7e0027c-741f-48ea-ae64-747d15307dee.jpg?aki_policy=xx_large",
+                price: '1820'
+            }
+        ],
     },
 
     reducers: {

@@ -58,7 +58,7 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'https://www.fastmock.site/mock/c4e4f9a346dbbead6705cac769ce92c2/homestay',
+      target: 'http://localhost:3000',
       pathRewrite: { '^/api': '' },
       changeOrigin: true
     }

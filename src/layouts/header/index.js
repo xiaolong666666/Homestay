@@ -8,7 +8,7 @@ import Icon from '@/assets/fonts/iconfont.css'
 
 const { TabPane } = Tabs
 
-const Header = ({ user: { isLoginFlag, isUserTips }, header: { isNoticeFlag, isMobileFlag }, dispatch }) => {
+const Header = ({ user: { isLoginFlag, isUserTips, user: { user_type } }, header: { isNoticeFlag, isMobileFlag }, dispatch }) => {
 
     useEffect(() => {
         document.addEventListener('click', () => {
@@ -27,6 +27,11 @@ const Header = ({ user: { isLoginFlag, isUserTips }, header: { isNoticeFlag, isM
         }
     }, [dispatch, isUserTips, isNoticeFlag, isMobileFlag])
 
+    useEffect(() => {
+        const animated = document.getElementsByClassName('ant-tabs-ink-bar-animated')[0]
+        if (animated) animated.style.width = "88px"
+    }, [isNoticeFlag])
+
     // 处理头像提示框
     const slideFace = (e, isUserTips) => {
         e.nativeEvent.stopImmediatePropagation();   // 阻止原生事件与最外层document上的事件间的冒泡
@@ -44,6 +49,17 @@ const Header = ({ user: { isLoginFlag, isUserTips }, header: { isNoticeFlag, isM
         e.nativeEvent.stopImmediatePropagation();   // 阻止原生事件与最外层document上的事件间的冒泡
         dispatch({ type: 'header/isMobileBox', isMobileFlag })
     }
+
+    // 处理通知事件
+    const handleNotice = (e) => {
+        e.nativeEvent.stopImmediatePropagation();   // 阻止原生事件与最外层document上的事件间的冒泡
+    }
+
+    // 退出登录
+    const handdleSignout = () => {
+        dispatch({ type: 'user/user_sign_out' })
+    }
+    
 
     return (
         <header className={HeaderStyle.header}>
@@ -95,8 +111,8 @@ const Header = ({ user: { isLoginFlag, isUserTips }, header: { isNoticeFlag, isM
                                         className={HeaderStyle.user_avatar_operate}
                                     >
                                         <ul>
-                                            <li><Link to='/user/xxx/123'>个人中心</Link></li>
-                                            <li>退出登录</li>
+                                            <li><Link to={`/user/${user_type}/123`}>个人中心</Link></li>
+                                            <li onClick={handdleSignout}>退出登录</li>
                                         </ul>
                                     </div>
                                 </CSSTransition>
@@ -125,7 +141,7 @@ const Header = ({ user: { isLoginFlag, isUserTips }, header: { isNoticeFlag, isM
                             exitDone: HeaderStyle['notice-exit-done']
                         }}
                     >
-                        <div className={HeaderStyle.notice_box}>
+                        <div className={HeaderStyle.notice_box} onClick={(e) => handleNotice(e)}>
                             <Tabs defaultActiveKey="1" centered>
                                 <TabPane tab="系统通知" key="1">
                                     <div className={HeaderStyle.notice_system_null}>

@@ -9,15 +9,7 @@
     width: 100%;
     height: 56px;
     border-bottom: 1px solid #f0f0f0;
-    // background-color: #FD8803;
-    // background-color: #FFE9A0;
-    // background-color: #fce28c;
-    // background-color: #fff;
     background-color: #EFE8E3;
-    // background-color: #FF6C5C;
-    // opacity: 0.8;
-    background-color: #FF6C5C;
-    background-color: #FF9585;
     z-index: 99;
 }
 
@@ -100,10 +92,18 @@
                 font-size: 14px;
                 text-align: center;
 
+                a {
+                    color: #333;
+                }
+
                 &:hover {
                     .pointer();
                     background: #f1eaf2;
                     color: #ffab6a;
+                    
+                    a {
+                        color: #ffab6a;
+                    }
                 }
             }
         }
@@ -164,6 +164,13 @@
             .ant-tabs-bar {
                 width: 208px;
                 margin: 0 auto 16px;
+
+                .ant-tabs-ink-bar {
+                    background: red;
+                    .ant-tabs-ink-bar-animated {
+                        width: 88px !important;
+                    }
+                }
             }
         }
 

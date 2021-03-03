@@ -43,6 +43,16 @@
         width: calc(25% - 0.5%);
         background: chartreuse;
     }
+
+    :global {
+        .ant-tabs-nav {
+            margin: 0;
+
+            .ant-tabs-tab {
+                width: 130px;
+            }
+        }
+    }
 }
 
 .pic_container {
@@ -201,14 +211,11 @@
     width: 80%;
     margin: 0 auto;
 
-    &>section {
+    section {
         overflow: hidden;
-        padding: 25px 0px;
+        margin-bottom: 16px;
+        padding: 16px 0px;
         border-bottom: 1px solid #ecf0f1;
-    }
-
-    &>section:nth-child(5n-1) {
-        border-bottom: 1px solid transparent;
     }
 
     .user_face {
@@ -259,6 +266,16 @@
 
             }
         }
+    }
+
+    .comment_wrapper {
+        margin-top: 20px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .comment_avatar {
+        width: 72px;
+        height: 72px;
     }
 }
 
@@ -313,14 +330,39 @@
     margin-top: 12px;
     padding: 16px;
     background: #FFF;
-}
 
-:global {
-    .ant-tabs-nav {
-        margin: 0;
+    h4 {
+        margin-bottom: 8px;
+    }
 
-        .ant-tabs-tab {
-            width: 130px;
+    .nickname {
+        margin-right: 4px;
+        color: @primary-color;
+    }
+
+    .house_wrapper {
+        position: relative;
+        margin-bottom: 16px;
+
+        img {
+            width: 100%;
+        }
+
+        .price {
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            bottom: 10%;
+            width: 50px;
+            height: 32px;
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+            background-color: #CCC;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bolder;
+            text-align: center;
+            line-height: 32px;
+            opacity: 0.8;
         }
     }
 }
