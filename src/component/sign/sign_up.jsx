@@ -94,7 +94,7 @@ class RegistrationForm extends Component {
                     message.error('很遗憾，注册失败！')
                 })
             }
-        });
+        })
     }
 
     render() {

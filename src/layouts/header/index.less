@@ -39,7 +39,7 @@
         line-height: 32px;
     }
 
-    .login, .register, .notice, .mobile {
+    .login, .register, .notice, .mobile, .nickname {
         float: right;
         width: 40px;
         height: 32px;
@@ -55,6 +55,11 @@
         .pointer()
     }
 
+    .nickname {
+        width: 72px;
+        margin: 12px 0;
+    }
+
     .user_avatar {
         position: relative;
         float: right;
@@ -62,9 +67,17 @@
         height: 32px;
         margin: 12px;
         border-radius: 50%;
-        background: url('@/assets/imgs/avatar.jpg') no-repeat;
         background-size: contain;
         .pointer();
+
+        img {
+            position: inherit;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
 
         .user_avatar_operate {
             display: none;

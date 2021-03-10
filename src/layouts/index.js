@@ -1,4 +1,5 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
+import { connect } from 'dva'
 import { startsWith } from 'lodash'
 import Header from './header'
 import Footer from './footer'
@@ -6,6 +7,16 @@ import Footer from './footer'
 function BasicLayout(props) {
   const { location: { pathname } } = props
   const signFlag = startsWith(pathname, '/sign_in') || startsWith(pathname, '/sign_up')
+  useEffect(() => {
+    fetchUser()
+  })
+  const fetchUser = () => {
+    const { dispatch } = props
+    if (!!localStorage.getItem('token')) {
+      console.log()
+      dispatch({ type: 'user/user_sign_check' })
+    }
+  }
   return (
     signFlag
       ? <Fragment>
@@ -19,4 +30,4 @@ function BasicLayout(props) {
   )
 }
 
-export default BasicLayout;
+export default connect()(BasicLayout)

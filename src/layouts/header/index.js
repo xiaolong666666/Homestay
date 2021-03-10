@@ -8,7 +8,10 @@ import Icon from '@/assets/fonts/iconfont.css'
 
 const { TabPane } = Tabs
 
-const Header = ({ user: { isLoginFlag, isUserTips, user: { user_type } }, header: { isNoticeFlag, isMobileFlag }, dispatch }) => {
+const Header = ({
+    user: { isLoginFlag, isUserTips, user: { user_id, user_role, user_phone, user_nickname, user_avatar } },
+    header: { isNoticeFlag, isMobileFlag }, dispatch
+}) => {
 
     useEffect(() => {
         document.addEventListener('click', () => {
@@ -31,6 +34,9 @@ const Header = ({ user: { isLoginFlag, isUserTips, user: { user_type } }, header
         const animated = document.getElementsByClassName('ant-tabs-ink-bar-animated')[0]
         if (animated) animated.style.width = "88px"
     }, [isNoticeFlag])
+
+    // 处理手机号显示
+    const phone = user_phone && user_phone.replace(user_phone.substr(2,7), '****')
 
     // 处理头像提示框
     const slideFace = (e, isUserTips) => {
@@ -57,9 +63,8 @@ const Header = ({ user: { isLoginFlag, isUserTips, user: { user_type } }, header
 
     // 退出登录
     const handdleSignout = () => {
-        dispatch({ type: 'user/user_sign_out' })
+        dispatch({ type: 'user/logOut' })
     }
-    
 
     return (
         <header className={HeaderStyle.header}>
@@ -91,10 +96,12 @@ const Header = ({ user: { isLoginFlag, isUserTips, user: { user_type } }, header
                                 通知
                                 <span className={`${Icon.iconfont} ${HeaderStyle.icon_notice}`}>&#xe60a;</span>
                             </div>
+                            <div className={HeaderStyle.nickname}>{user_nickname || phone }</div>
                             <div
                                 className={HeaderStyle.user_avatar}
                                 onClick={(e) => slideFace(e, !isUserTips)}
                             >
+                                <img src={user_avatar} alt="" />
                                 <CSSTransition
                                     in={isUserTips}
                                     timeout={600}
@@ -111,7 +118,7 @@ const Header = ({ user: { isLoginFlag, isUserTips, user: { user_type } }, header
                                         className={HeaderStyle.user_avatar_operate}
                                     >
                                         <ul>
-                                            <li><Link to={`/user/${user_type}/123`}>个人中心</Link></li>
+                                            <li><Link to={`/user/${user_role}/${user_id}/information`}>个人中心</Link></li>
                                             <li onClick={handdleSignout}>退出登录</li>
                                         </ul>
                                     </div>
@@ -195,11 +202,9 @@ const Header = ({ user: { isLoginFlag, isUserTips, user: { user_type } }, header
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        user: state.user,
-        header: state.header
-    }
-}
+const mapStateToProps = state => ({
+    user: state.user,
+    header: state.header
+})
 
 export default connect(mapStateToProps)(Header);
