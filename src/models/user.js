@@ -32,6 +32,7 @@ export default {
         // 注销
         'logOut'(state, action) {
             localStorage.removeItem('token')
+            router.push('/sign_in')
             return {
                 ...state,
                 isLoginFlag: false,
@@ -45,7 +46,6 @@ export default {
                 homestay: action.homestay
             }
         }
-
     },
 
     effects: {
@@ -106,6 +106,13 @@ export default {
                 type: 'homestay',
                 homestay
             })
+        },
+
+        // 发布房源
+        *'homestay_issue'({ payload }, { call, put }) {
+            const token = localStorage.getItem('token')
+            axios.defaults.headers.Authorization = token
+            return yield call(axios.post, "/api/user/homestay/issue", payload)
         }
     },
 }

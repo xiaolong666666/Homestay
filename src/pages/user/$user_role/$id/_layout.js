@@ -18,12 +18,7 @@ class UserBasicLayout extends Component {
 
     RouteToJump = (route = 'information') => {
         const { match: { params: { user_role, id } } } = this.props
-        localStorage.setItem('itemKey', [route])
         router.push(`/user/${user_role}/${id}/${route}`)
-    }
-
-    componentWillUnmount() {
-        localStorage.removeItem('itemKey')
     }
 
     onSelect = (item) => {
@@ -33,7 +28,6 @@ class UserBasicLayout extends Component {
 
     render() {
         const { user: { user: { user_avatar } } } = this.props
-        const itemKey = localStorage.getItem('itemKey')
         return (
             <div className={Public.normal}>
                 <div className={`${Public.container} ${LayoutStyle.personal}`}>
@@ -41,7 +35,7 @@ class UserBasicLayout extends Component {
                         <div className={LayoutStyle.face_wrapper}><img src={user_avatar} alt="" /></div>
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={itemKey || ["information"]}
+                            defaultSelectedKeys={["information"]}
                             onSelect={this.onSelect}
                         >
                             <Menu.Item key="information"><Icon type="user" />个人资料</Menu.Item>

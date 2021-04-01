@@ -1,33 +1,17 @@
-import React, { Component } from 'react'
-import { Table } from 'antd'
+import React, { Component, Fragment } from 'react'
+import { Table, Button, message } from 'antd'
 import { connect } from 'dva'
+import { isEmpty } from 'lodash'
 import columns from './columns'
-
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-    },
-    {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-    },
-    {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-    },
-];
-
+import Behavior from './Behavior'
+import HouseStyle from './index.less'
 class index extends Component {
+
+    state = {
+        selectedRowKeys: [],
+        visible: false,
+        behaviorType: 'issue',
+    }
 
     componentDidMount() {
         this.fetchHomestay()
@@ -37,13 +21,94 @@ class index extends Component {
         const { dispatch } = this.props
         dispatch({ type: 'user/fetch_homestay' })
     }
+
+    onSelectRow = (record) => {
+        const { homestay_id } = record
+        this.setState({ selectedRowKeys: [homestay_id] })
+    }
+
+    // 发布房源点击操作
+    issueHouse = () => {
+        this.setState({
+            visible: true,
+            behaviorType: 'issue'
+        })
+    }
+
+    // 编辑房源点击操作
+    modifyHouse = () => {
+        const { selectedRowKeys } = this.state
+        if (!isEmpty(selectedRowKeys)) {
+            this.setState({
+                visible: true,
+            })
+        } else {
+            message.warning({
+                content: '请先选择操作房源',
+            })
+        }
+    }
+
+    // 关闭Modal
+    onClose = () => {
+        this.setState({
+            visible: false,
+        })
+    }
+
+    // 发布房源
+    onIssue = (homestay) => {
+        const { dispatch } = this.props
+        dispatch({ type: 'user/homestay_issue', payload: homestay })
+            .then(this.onIssueTips)
+            .catch(this.onIssueTips)
+    }
+
+    // 发布房源后提示
+    onIssueTips = (result) => {
+        const { data: { code, message: home_message } } = result
+        code ? message.success(home_message) : message.error(home_message)
+        this.onClose()
+    }
+
+    // 编辑房源
+    onModify = () => {
+        console.log('')
+    }
+
     render() {
         const { user: { homestay } } = this.props
-        console.log('homestay', homestay)
+        const { selectedRowKeys, visible, behaviorType } = this.state
+        const rowSelection = {
+            type: 'radio',
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+                const { homestay_id } = selectedRows[0]
+                this.setState({ selectedRowKeys: [homestay_id] })
+            },
+        }
         return (
-            <div>
-                <Table columns={columns} dataSource={data} />
-            </div>
+            <Fragment>
+                <div className={HouseStyle.header}>
+                    <Button type="primary" onClick={this.issueHouse}>发布房源</Button>
+                    <Button type="primary" onClick={this.modifyHouse}>编辑房源</Button>
+                </div>
+                <Table
+                    dataSource={homestay}
+                    columns={columns}
+                    rowSelection={rowSelection}
+                    onRow={record => ({
+                        onClick: () => this.onSelectRow(record)
+                    })}
+                    rowKey='homestay_id'
+                />
+                <Behavior
+                    visible={visible}
+                    behaviorType={behaviorType}
+                    onIssue={this.onIssue}
+                    onClose={this.onClose}
+                />
+            </Fragment>
         );
     }
 }

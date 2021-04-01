@@ -93,29 +93,35 @@
             &::after {
                 content: '';
                 position: absolute;
-                top: -12%;
+                top: -11%;
                 left: 36%;
                 border-left: 12px solid transparent;
                 border-bottom: 10px solid #fff;
                 border-right: 12px solid transparent;
             }
 
-            ul>li {
-                padding: 8px 12px;
-                font-size: 14px;
-                text-align: center;
+            ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
 
-                a {
-                    color: #333;
-                }
+                >li {
+                    padding: 8px 12px;
+                    font-size: 14px;
+                    text-align: center;
 
-                &:hover {
-                    .pointer();
-                    background: #f1eaf2;
-                    color: #ffab6a;
-                    
                     a {
+                        color: #333;
+                    }
+
+                    &:hover {
+                        .pointer();
+                        background: #f1eaf2;
                         color: #ffab6a;
+                        
+                        a {
+                            color: #ffab6a;
+                        }
                     }
                 }
             }
@@ -222,7 +228,7 @@
         &::after {
             content: '';
             position: absolute;
-            top: -5%;
+            top: -4%;
             left: 82%;
             border-left: 12px solid transparent;
             border-bottom: 10px solid #fff;

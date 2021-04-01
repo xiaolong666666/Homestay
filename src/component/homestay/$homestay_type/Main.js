@@ -12,7 +12,7 @@ class Main extends Component {
 
     componentDidMount() {
         window.addEventListener("scroll", throttling(this.listener, 100))
-        this.dispatchFetchHomestay()
+        // this.dispatchFetchHomestay()
     }
 
     componentWillUnmount() {

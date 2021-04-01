@@ -10,6 +10,7 @@ export const isUserRole = (user_role) => {
     return role
 }
 
+// 判断用户性别
 export const isGender = (user_gender) => {
     let gender = '男'
     switch (user_gender) {

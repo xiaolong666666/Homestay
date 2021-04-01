@@ -1,41 +1,43 @@
-import { Divider, Tag } from 'antd'
+import { Tag, Button } from 'antd'
+import Link from 'umi/link'
+import { isHomestayType, isFacility } from '@/utils/homestay'
 
 const columns = [
     {
         title: '公寓名称',
-        dataIndex: 'name',
-        key: 'name',
-        render: text => <a>{text}</a>,
+        width: '20%',
+        dataIndex: 'homestay_name',
+        key: 'homestay_name',
+        render: (homestay_name, { homestay_id, homestay_type }) => 
+            <Link to={`/homestay/${isHomestayType(homestay_type)}/${homestay_id}`}>{homestay_name}</Link>,
     },
     {
         title: '价格',
-        dataIndex: 'age',
-        key: 'age',
+        width: '10%',
+        dataIndex: 'homestay_pirce',
+        key: 'homestay_pirce',
     },
     {
-        title: '地址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '公寓描述',
+        dataIndex: 'homestay_recommend',
+        key: 'homestay_recommend',
     },
     {
-        title: '地址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '公寓地址',
+        dataIndex: 'homestay_address',
+        key: 'homestay_address',
     },
     {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
+        title: '公寓设施',
+        width: '20%',
+        key: 'homestay_facility',
+        dataIndex: 'homestay_facility',
         render: tags => (
             <span>
                 {tags.map(tag => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
                     return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
+                        <Tag color={'green'} key={tag}>
+                            {isFacility(tag)}
                         </Tag>
                     );
                 })}
@@ -43,14 +45,11 @@ const columns = [
         ),
     },
     {
-        title: 'Action',
+        title: '操作',
+        width: '10%',
         key: 'action',
         render: (text, record) => (
-            <span>
-                <a>Invite {record.name}</a>
-                <Divider type="vertical" />
-                <a>Delete</a>
-            </span>
+            <Button type="danger">删除</Button>
         ),
     },
 ]
