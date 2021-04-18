@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Tabs, Pagination, Comment, Avatar, Form, Button, Input } from 'antd'
+import { Tabs, Pagination, Comment, Avatar, Form, Button, Input, message } from 'antd'
 import { connect } from 'dva'
 import Icon from '@/assets/fonts/iconfont.css'
 import InfoStyle from './index.less'
@@ -20,7 +20,7 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
         <Form.Item>
             <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
                 发表评论
-                </Button>
+            </Button>
         </Form.Item>
     </Fragment>
 )
@@ -33,7 +33,9 @@ class CommentComponent extends Component {
 
     onPageChange = (current) => {
         const { dispatch } = this.props
+        const comment_start = document.getElementById('comment_start')
         dispatch({ type: 'homestay_detail/dump_comment_current', current })
+        comment_start.scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
 
     handleChange = (e) => {
@@ -42,14 +44,47 @@ class CommentComponent extends Component {
         })
     }
 
+    // 发表评论
     handleSubmit = () => {
-        // const { dispatch } = this.props
-        // dispatch({ type: 'homestay_detail/dump_comment_current', current })
-        // 发送评论
+        const {
+            dispatch,
+            match: { params: { homestay_id } }
+        } = this.props
+        const { value } = this.state
+        dispatch({
+            type: 'homestay_detail/submitComment',
+            payload: {
+                homestay_id,
+                comment_content: value.trim(),
+            }
+        })
+        .then(this.handleSubmitTips)
+        .catch((e) => {
+            message.error(e.message)
+        })
+    }
+
+    // 发表评论结果
+    handleSubmitTips = (res) => {
+        const {
+            dispatch,
+            match: { params: { homestay_id } }
+        } = this.props
+        const { data: { code, message: tips } } = res
+        if (code) {
+            message.success(tips)
+            this.setState({ value: '' })
+            dispatch({ type: 'homestay_detail/fetchHomestayComment', payload: { homestay_id } })
+        } else {
+            message.error(tips)
+        }
     }
 
     render() {
-        const { homestay_detail: { comment, current, pageSize, total } } = this.props
+        const {
+            user: { user: { user_avatar } },
+            homestay_detail: { commentSource, current, pageSize, total }
+        } = this.props
         const submitting = this.props.loading.global
         const { value } = this.state
         return (
@@ -57,13 +92,14 @@ class CommentComponent extends Component {
                 <TabPane tab={<div className={`${InfoStyle.comment} ${Icon.iconfont}`}>{`评论(${total})`}</div>} key="commit">
                     <div className={InfoStyle.comment_container}>
                         {
-                            comment.filter((item, index) => index >= 5*(current-1) && index <= 5*current-1).map((item, index) => (
+                            commentSource.filter((item, index) => index >= 5*(current-1) && index <= 5*current-1).map((item, index) => (
                                 <section key={`comment${index}`}>
                                     <img title={item.nickName} alt="" className={InfoStyle.user_face} src={item.face} />
                                     <div className={InfoStyle.comment_message}>
                                         <h5>
                                             <span className={InfoStyle.user_nickname}>{item.nickName}</span>
-                                        入住时间：<time>{item.time}</time>
+                                            <time>{item.time}</time>
+                                            评论
                                         </h5>
                                         <p>{item.content}</p>
                                         {item.reply && <div className={InfoStyle.reply_box}>
@@ -81,8 +117,8 @@ class CommentComponent extends Component {
                             avatar={
                                 <Avatar
                                     className={InfoStyle.comment_avatar}
-                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                                    alt="用户"
+                                    src={user_avatar}
+                                    alt="用户头像"
                                 />
                             }
                             content={
@@ -94,6 +130,7 @@ class CommentComponent extends Component {
                                 />
                             }
                         />
+                        <a href="/" id="comment" className={InfoStyle.comment_anchor}>_</a>
                     </div>
                 </TabPane>
             </Tabs>
@@ -103,7 +140,8 @@ class CommentComponent extends Component {
 
 const mapStateToProps = state => {
     return {
-        loading: state.loading
+        loading: state.loading,
+        user: state.user,
     }
 }
 

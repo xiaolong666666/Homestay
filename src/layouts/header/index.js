@@ -34,6 +34,16 @@ const Header = ({
         const animated = document.getElementsByClassName('ant-tabs-ink-bar-animated')[0]
         if (animated) animated.style.width = "88px"
     }, [isNoticeFlag])
+    
+    // 获取itemKey
+    const activeKey = () => {
+        if (!!localStorage.getItem('itemKey')) {
+            return JSON.parse(localStorage.getItem('itemKey'))[0]
+        } else {
+            return 'information'
+        }
+        
+    }
 
     // 处理手机号显示
     const phone = user_phone && user_phone.replace(user_phone.substr(2,7), '****')
@@ -118,7 +128,7 @@ const Header = ({
                                         className={HeaderStyle.user_avatar_operate}
                                     >
                                         <ul>
-                                            <li><Link to={`/user/${user_role}/${user_id}/information`}>个人中心</Link></li>
+                                                <li><Link to={`/user/${user_role}/${user_id}/${activeKey()}`}>个人中心</Link></li>
                                             <li onClick={handdleSignout}>退出登录</li>
                                         </ul>
                                     </div>

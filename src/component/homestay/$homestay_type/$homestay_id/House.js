@@ -10,7 +10,7 @@ const House = (props) => {
                 landlord_house.map((item, index) => (
                     <div key={`key${index}`} className={InfoStyle.house_wrapper}>
                         <img src={item.pic} alt="" />
-                        <div className={InfoStyle.price}>{item.price}</div>
+                        <div className={InfoStyle.price}>{`￥${item.price}`}</div>
                     </div>
                 ))
             }

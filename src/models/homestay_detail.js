@@ -16,8 +16,9 @@ export default {
             "https://img.yitianyishu.com/room/coupon/7e5dc09bf6a9dee1b52ebad330813b11-1000_660.jpg",
         ],
         like: false,
+        like_count: '',
         favorites: false,
-        comment: [
+        commentSource: [
             {
                 "face": "https://image.xiaozhustatic2.com/22/5,17,0,64,2335,260,260,3aad8464.jpg",
                 "nickName": "可爱又迷人的佳",
@@ -75,7 +76,7 @@ export default {
                 "reply": "感恩遇见哦"
             }
         ],
-        current: 2,
+        current: 1,
         pageSize: 5,
         total: 0,
         landlord_info: {
@@ -106,10 +107,17 @@ export default {
                 ...state,
                 picDataSource: action.picDataSource,
                 like: action.like,
+                like_count: action.like_count,
                 favorites: action.favorites,
-                comment: action.comment,
-                total: action.comment.length,
                 landlord_info: action.landlord_info,
+                landlord_house: action.landlord_house,
+            }
+        },
+        'dump_homestay_comment'(state, action) {
+            return {
+                ...state,
+                commentSource: action.commentSource,
+                total: action.commentSource.length,
             }
         },
         'dump_comment_current'(state, action) {
@@ -121,16 +129,43 @@ export default {
     },
 
     effects: {
-        *'fetchHomestayDetail'({ payload }, { call, put }) {
-            const { data: { picDataSource, like, favorites, comment, landlord_info } } = yield call(axios.get, "/api/homestay/detail")
+
+        // 获取房源详情
+        *'fetchHomestayDetail'({ payload: { user_id, homestay_id } }, { call, put }) {
+            const { data: { picDataSource, like, like_count, favorites, landlord_info, landlord_house } } = yield call(axios.get, `/api/homestay/homestay_detail?homestay_id=${homestay_id}&user_id=${user_id}`)
             yield put({
                 type: 'dump_homestay_detail',
                 picDataSource,
                 like,
+                like_count,
                 favorites,
-                comment,
                 landlord_info,
-            });
+                landlord_house,
+            })
         },
+
+        // 获取房源评论
+        *'fetchHomestayComment'({ payload: { homestay_id } }, { call, put }) {
+            const { data: { commentSource } } = yield call(axios.get, `/api/homestay/homestay_comment?homestay_id=${homestay_id}`)
+            yield put ({
+                type: 'dump_homestay_comment',
+                commentSource,
+            })
+        },
+
+        // 提交房源评论
+        *'submitComment'({ payload }, { call, put }) {
+            return yield call(axios.post, "/api/homestay/homestay_comment/submit_comment", payload)
+        },
+
+        // 点赞或取消点赞
+        *'submitlike'({ payload }, { call, put }) {
+            return yield call(axios.post, "/api/homestay/homestay_detail/submit_like", payload)
+        },
+
+        // 收藏或取消取赞
+        *'submitfavorites'({ payload }, { call, put }) {
+            return yield call(axios.post, "/api/homestay/homestay_detail/submit_favorites", payload)
+        }
     },
 }

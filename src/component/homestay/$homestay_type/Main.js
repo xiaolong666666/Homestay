@@ -12,7 +12,7 @@ class Main extends Component {
 
     componentDidMount() {
         window.addEventListener("scroll", throttling(this.listener, 100))
-        // this.dispatchFetchHomestay()
+        this.dispatchFetchHomestay()
     }
 
     componentWillUnmount() {
@@ -21,8 +21,9 @@ class Main extends Component {
 
     // 请求公寓数据
     dispatchFetchHomestay = () => {
-        const { dispatch } = this.props
-        dispatch({ type: 'homestay/fetchHomestay' })
+        const { dispatch, homestay_type } = this.props
+        const type = homestay_type.split('/')[2]
+        dispatch({ type: 'homestay/fetchHomestay', payload: { homestay_type: type } })
     }
 
     // 监听滚动条的位置请求数据
@@ -44,7 +45,7 @@ class Main extends Component {
             <div className={HomestayStyle.main_wrapper}>
                 {
                     homestayDataSource.map(homestay => (<Link
-                        to={`${homestay_type}/${homestay.id}`}
+                        to={`${homestay_type}/${homestay.homestay_id}`}
                         key={homestay.id}
                         className={HomestayStyle.homestay_wrapper}>
                         <div className={HomestayStyle.homestay_pic}><img src={homestay.propagandaPicture} alt="" /></div>

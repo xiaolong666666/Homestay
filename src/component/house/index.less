@@ -10,13 +10,36 @@
     width: 40%;
 }
 
-.address_cascader {
-    width: 50% !important;
-}
+.picture_wrapper {
+    position: relative;
+    float: left;
+    width: 65px;
+    height: 57px;
+    margin-right: 8px;
+    border: 1px dashed #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
 
-.address_input {
-    width: 48%;
-    margin-left: 2%
+    img {
+        position: absolute;
+        right: 15%;
+        top: 15%;
+        width: 75%;
+        height: 75%;
+        border-radius: 2px;
+    }
+
+    span {
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        height: 8px;
+        line-height: 8px;
+        color: crimson;
+        font-weight: bolder;
+        cursor: pointer;
+    }
 }
 
 :global {

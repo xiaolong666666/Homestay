@@ -23,11 +23,13 @@ class UserBasicLayout extends Component {
 
     onSelect = (item) => {
         const { key } = item
+        localStorage.setItem('itemKey', JSON.stringify([key]))
         this.RouteToJump(key)
     }
 
     render() {
         const { user: { user: { user_avatar } } } = this.props
+        const activeKey = JSON.parse(localStorage.getItem('itemKey'))
         return (
             <div className={Public.normal}>
                 <div className={`${Public.container} ${LayoutStyle.personal}`}>
@@ -35,15 +37,15 @@ class UserBasicLayout extends Component {
                         <div className={LayoutStyle.face_wrapper}><img src={user_avatar} alt="" /></div>
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={["information"]}
+                            defaultSelectedKeys={activeKey}
                             onSelect={this.onSelect}
                         >
                             <Menu.Item key="information"><Icon type="user" />个人资料</Menu.Item>
+                            <Menu.Item key="home"><Icon type="home" />我的房源</Menu.Item>
                             <Menu.Item key="like"><Icon type="heart" />我的点赞</Menu.Item>
                             <Menu.Item key="favorites"><Icon type="star" />我的收藏</Menu.Item>
                             <Menu.Item key="reserve"><Icon type="dashboard" />我的预约</Menu.Item>
                             <Menu.Item key="appraisal"><span className={`${LayoutStyle.appraisal} ${IconStyle.iconfont}`}>&#xe61a;</span>我的评价</Menu.Item>
-                            <Menu.Item key="home"><Icon type="home" />我的房源</Menu.Item>
                         </Menu>
                     </div>
                     <div className={LayoutStyle.personal_main}>{this.props.children}</div>

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Form, Input, Icon, Checkbox, Cascader, Upload } from 'antd'
-import { addressSource, facilitySource } from '@/constant/homestay'
+import { Modal, Form, Input, Icon, Radio, Checkbox, Upload } from 'antd'
+import { typeSource, facilitySource } from '@/constant/homestay'
 import behaviorStyle from './index.less'
 
 const formItemLayout = {
@@ -22,10 +22,15 @@ const uploadButton = (
 class Behavior extends Component {
 
     state = {
-        homestay_picture: []
+        homestay_picture: [],
+        pictured: [],
     }
 
-    addressRef = ref => this.addressDetail = ref
+    componentDidMount() {
+        const { form: { setFieldsValue }, behaviorType, homestay_detail } = this.props
+        behaviorType === 'modify' ? setFieldsValue(homestay_detail) : setFieldsValue({ homestay_type: 1, homestay_facility: [0, 3] })
+        behaviorType === 'modify' && this.setState({ pictured: homestay_detail.homestay_picture })
+    }
 
     // 上传图片
     handleChange = (info) => {
@@ -33,26 +38,38 @@ class Behavior extends Component {
             const { homestay_picture } = this.state
             const { file: { xhr: { response } } } = info
             const pictureUrl = JSON.parse(response).pictureUrl
-            this.setState({ homestay_picture: [ ...homestay_picture, pictureUrl ] })
+            this.setState({ homestay_picture: [...homestay_picture, pictureUrl] })
         }
     }
 
     onOk = () => {
-        const { form: { validateFields }, onIssue } = this.props
-        const { homestay_picture } = this.state
+        const { form: { validateFields }, behaviorType, onIssue, onModify } = this.props
+        const { homestay_picture, pictured } = this.state
         validateFields((error, result) => {
             if (!error) {
-                result.homestay_address = result.homestay_address.join('')
-                result.homestay_address = result.homestay_address + (this.addressDetail.state.value || '')
-                result.homestay_picture = homestay_picture
-                onIssue(result)
+                result.homestay_picture = behaviorType === 'issue' ? homestay_picture : pictured.concat(homestay_picture)
+                behaviorType === 'issue' ? onIssue(result) : onModify(result)
             }
         })
     }
 
+    onDeletePictured = (url) => {
+        const { pictured } = this.state
+        const pictured_handle = pictured.filter(item => (url !== item ? true : false))
+        this.setState({ pictured: pictured_handle })
+    }
+
     render() {
-        const { form: { getFieldDecorator }, visible, behaviorType, onClose } = this.props
+        const {
+            visible,
+            behaviorType,
+            onClose,
+            form: { getFieldDecorator },
+        } = this.props
+        const { homestay_picture, pictured } = this.state
         const token = localStorage.getItem('token')
+        console.log('homestay_picture', homestay_picture)
+        console.log('pictured', pictured)
         return (
             <Modal
                 title={behaviorType === 'issue' ? '发布房源' : '编辑房源'}
@@ -73,6 +90,16 @@ class Behavior extends Component {
                             ],
                         })(<Input autoComplete="off" />)}
                     </Form.Item>
+                    <Form.Item label="公寓类型">
+                        {getFieldDecorator('homestay_type', {
+                            rules: [
+                                {
+                                    required: true,
+                                    message: '请输入公寓类型!',
+                                },
+                            ],
+                        })(<Radio.Group options={typeSource} />)}
+                    </Form.Item>
                     <Form.Item label="价格">
                         {getFieldDecorator('homestay_pirce', {
                             rules: [
@@ -91,32 +118,32 @@ class Behavior extends Component {
                                     message: '请输入公寓地址!',
                                 },
                             ],
-                        })(<Cascader
-                            placeholder=""
-                            options={addressSource}
-                            className={behaviorStyle.address_cascader}
-                        />)}
-                        <Input ref={this.addressRef} className={behaviorStyle.address_input} />
+                        })(<Input />)}
                     </Form.Item>
                     <Form.Item label="公寓设施">
-                        {getFieldDecorator('homestay_facility', {
-                            initialValue: [0, 3]
-                        })(<Checkbox.Group options={facilitySource} />)}
+                        {getFieldDecorator('homestay_facility')(<Checkbox.Group options={facilitySource} />)}
                     </Form.Item>
                     <Form.Item label="公寓描述">
                         {getFieldDecorator('homestay_recommend')(<Input.TextArea />)}
                     </Form.Item>
+                    {behaviorType === 'modify' && <Form.Item label="已上传">
+                        {pictured.map((item, index) => <div key={`key${index}`} className={behaviorStyle.picture_wrapper}>
+                            <img src={item} alt="图片加载错误" />
+                            <span onClick={() => this.onDeletePictured(item)}>x</span>
+                        </div>)}
+                    </Form.Item>}
                     <Form.Item label="公寓图片">
                         {getFieldDecorator('homestay_picture')(<Upload
                             name="picture"
                             headers={{ Authorization: token }}
                             action={`http://localhost:3000/user/homestay/picture`}
                             listType="picture-card"
-                            // fileList={fileList}
                             onChange={this.handleChange}
                             multiple
                         >
-                            {uploadButton}
+                            {
+                                (pictured.length + homestay_picture.length) >= 8 ? null : uploadButton
+                            }
                         </Upload>)}
                     </Form.Item>
                 </Form>

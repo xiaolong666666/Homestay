@@ -1,10 +1,11 @@
-import React from 'react';
+import React from 'react'
+import Like from '@/component/user_like'
 
 const like = () => {
     return (
-        <div>
-            我的点赞
-        </div>
+        <>
+            <Like />
+        </>
     );
 };
 

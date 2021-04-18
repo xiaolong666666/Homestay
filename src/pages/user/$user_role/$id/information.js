@@ -51,7 +51,7 @@ class Information extends Component {
 
     // 更改个人信息--发送数据
     handleSubmit = e => {
-        const { dispatch, form: { validateFieldsAndScroll } } = this.props
+        const { dispatch, form: { validateFieldsAndScroll, setFieldsValue } } = this.props
         const { avatarUrl } = this.state
         e.preventDefault()
         validateFieldsAndScroll((err, values) => {
@@ -65,6 +65,7 @@ class Information extends Component {
                         } else {
                             message.error(tips)
                         }
+                        setFieldsValue({ password: '', newpassword: '' })
                     })
                     .catch(e => {
                         message.error('很遗憾，修改个人信息失败！')

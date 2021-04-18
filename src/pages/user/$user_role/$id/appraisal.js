@@ -1,10 +1,11 @@
-import React from 'react';
+import React from 'react'
+import Appraisal from '@/component/user_appraisal'
 
 const appraisal = () => {
     return (
-        <div>
-            appraisal
-        </div>
+        <>
+            <Appraisal />
+        </>
     );
 };
 

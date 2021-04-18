@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, message } from 'antd'
+import { Table, Button, message, Modal } from 'antd'
 import { connect } from 'dva'
 import { isEmpty } from 'lodash'
 import columns from './columns'
@@ -22,7 +22,7 @@ class index extends Component {
         dispatch({ type: 'user/fetch_homestay' })
     }
 
-    onSelectRow = (record) => {
+    onSelectRow = record => {
         const { homestay_id } = record
         this.setState({ selectedRowKeys: [homestay_id] })
     }
@@ -30,16 +30,20 @@ class index extends Component {
     // 发布房源点击操作
     issueHouse = () => {
         this.setState({
+            behaviorType: 'issue',
             visible: true,
-            behaviorType: 'issue'
         })
     }
 
     // 编辑房源点击操作
-    modifyHouse = () => {
+    modifyHouse = async () => {
+        const { dispatch } = this.props
         const { selectedRowKeys } = this.state
+        const homestay_id = selectedRowKeys.join()
         if (!isEmpty(selectedRowKeys)) {
+            await dispatch({ type: 'user/homestay_detail_fetch', payload: homestay_id })
             this.setState({
+                behaviorType: 'modify',
                 visible: true,
             })
         } else {
@@ -57,27 +61,65 @@ class index extends Component {
     }
 
     // 发布房源
-    onIssue = (homestay) => {
+    onIssue = homestay => {
         const { dispatch } = this.props
         dispatch({ type: 'user/homestay_issue', payload: homestay })
             .then(this.onIssueTips)
             .catch(this.onIssueTips)
     }
 
-    // 发布房源后提示
-    onIssueTips = (result) => {
+    // 发布房源提示
+    onIssueTips = result => {
         const { data: { code, message: home_message } } = result
         code ? message.success(home_message) : message.error(home_message)
+        code && this.fetchHomestay()
         this.onClose()
     }
 
     // 编辑房源
-    onModify = () => {
-        console.log('')
+    onModify = homestay => {
+        const { dispatch } = this.props
+        const { selectedRowKeys } = this.state
+        dispatch({ type: 'user/homestay_modify', payload: { homestay_id: selectedRowKeys[0], ...homestay } })
+            .then(this.onModifyTips)
+            .catch(this.onModifyTips)
+    }
+
+    // 编辑房源提示
+    onModifyTips = result => {
+        const { data: { code, message: home_message } } = result
+        code ? message.success(home_message) : message.error(home_message)
+        code && this.fetchHomestay()
+        this.onClose()
+    }
+
+    // 删除房源确认框
+    onDeleteBefore = homestay_id => {
+        Modal.confirm({
+            title: "您确定删除该房源吗?",
+            okText: "确定",
+            cancelText: "取消",
+            onOk: () => this.onDelete(homestay_id),
+        });
+    }
+
+    // 删除房源
+    onDelete = homestay_id => {
+        const { dispatch } = this.props
+        dispatch({ type: 'user/homestay_delete', payload: homestay_id })
+            .then(this.onDeleteTips)
+            .catch(this.onDeleteTips)
+    }
+
+    // 删除房源提示
+    onDeleteTips = result => {
+        const { data: { code, message: home_message } } = result
+        code ? message.success(home_message) : message.error(home_message)
+        code && this.fetchHomestay()
     }
 
     render() {
-        const { user: { homestay } } = this.props
+        const { user: { homestay, homestay_detail } } = this.props
         const { selectedRowKeys, visible, behaviorType } = this.state
         const rowSelection = {
             type: 'radio',
@@ -95,19 +137,21 @@ class index extends Component {
                 </div>
                 <Table
                     dataSource={homestay}
-                    columns={columns}
+                    columns={columns(this.onDeleteBefore)}
                     rowSelection={rowSelection}
                     onRow={record => ({
                         onClick: () => this.onSelectRow(record)
                     })}
                     rowKey='homestay_id'
                 />
-                <Behavior
+                {visible && <Behavior
                     visible={visible}
                     behaviorType={behaviorType}
+                    homestay_detail={homestay_detail}
                     onIssue={this.onIssue}
+                    onModify={this.onModify}
                     onClose={this.onClose}
-                />
+                />}
             </Fragment>
         );
     }

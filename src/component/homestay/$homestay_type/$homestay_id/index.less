@@ -41,7 +41,6 @@
     .info_right {
         float: right;
         width: calc(25% - 0.5%);
-        background: chartreuse;
     }
 
     :global {
@@ -176,6 +175,10 @@
 
     .unlike {
         .operate_icon('\e85c', @color);
+        width: 102px;
+        span {
+            font-weight: normal
+        }
     }
 
     .unfavorites {
@@ -184,6 +187,10 @@
 
     .liked {
         .operate_icon('\e85c', @primary-color);
+        width: 102px;
+        span {
+            font-weight: normal
+        }
     }
 
     .favorites {
@@ -220,8 +227,8 @@
 
     .user_face {
         float: left;
-        width: 72px;
-        height: 72px;
+        width: 50px;
+        height: 50px;
         margin-right: 16px;
         border-radius: 50%;
     }
@@ -232,10 +239,15 @@
 
         h5 {
             font-size: 14px;
+            margin-bottom: 8px;
+
             .user_nickname {
                 margin-right: 4px;
                 color: @primary-color;
                 font-weight: bolder;
+            }
+            time {
+                margin: 0 8px;
             }
         }
 
@@ -268,14 +280,20 @@
         }
     }
 
+    a.comment_anchor {
+        display: inline-block;
+        margin-bottom: 12px;
+        color: #ccc !important;
+    }
+
     .comment_wrapper {
         margin-top: 20px;
         font-family: 'Courier New', Courier, monospace;
     }
 
     .comment_avatar {
-        width: 72px;
-        height: 72px;
+        width: 50px;
+        height: 50px;
     }
 }
 
@@ -353,7 +371,7 @@
             position: absolute;
             left: 0;
             bottom: 10%;
-            width: 50px;
+            width: 60px;
             height: 32px;
             border-top-right-radius: 50px;
             border-bottom-right-radius: 50px;

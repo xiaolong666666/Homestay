@@ -1,14 +1,14 @@
-import { Tag, Button } from 'antd'
+import { Tag } from 'antd'
 import Link from 'umi/link'
 import { isHomestayType, isFacility } from '@/utils/homestay'
 
-const columns = (onDelete) => [
+const columns = [
     {
         title: '公寓名称',
         width: '20%',
         dataIndex: 'homestay_name',
         key: 'homestay_name',
-        render: (homestay_name, { homestay_id, homestay_type }) => 
+        render: (homestay_name, { homestay_id, homestay_type }) =>
             <Link to={`/homestay/${isHomestayType(homestay_type)}/${homestay_id}`}>{homestay_name}</Link>,
     },
     {
@@ -42,14 +42,6 @@ const columns = (onDelete) => [
                     );
                 })}
             </span>
-        ),
-    },
-    {
-        title: '操作',
-        width: '10%',
-        key: 'action',
-        render: (text, { homestay_id }) => (
-            <Button type="danger" onClick={() => onDelete(homestay_id)}>删除</Button>
         ),
     },
 ]

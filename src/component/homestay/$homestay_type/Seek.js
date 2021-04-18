@@ -8,14 +8,14 @@ const { Option } = Select
 const { Group: CheckboxGroup } = Checkbox
 
 const countyDataSource = [
-    { value: 'hgq', label: '海港区' },
-    { value: 'kfq', label: '开发区' },
-    { value: 'shgq', label: '山海关区' },
-    { value: 'bdhq', label: '北戴河区' },
-    { value: 'fnx', label: '抚宁县' },
-    { value: 'clx', label: '昌黎县' },
-    { value: 'llx', label: '卢龙县' },
-    { value: 'qlx', label: '青龙县' },
+    { value: 1, label: '海港区' },
+    { value: 2, label: '开发区' },
+    { value: 3, label: '山海关区' },
+    { value: 4, label: '北戴河区' },
+    { value: 5, label: '抚宁县' },
+    { value: 6, label: '昌黎县' },
+    { value: 7, label: '卢龙县' },
+    { value: 8, label: '青龙县' },
 ]
 
 const priceDataSource = [
