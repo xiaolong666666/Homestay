@@ -1,17 +1,8 @@
 import React from 'react';
 import { Link } from 'dva/router'
 import { Divider  } from 'antd'
+import { linkDataSource } from '@/utils'
 import FooterStyle from './index.less'
-
-const linkDataSource = [
-    { label: '隐私协议', link: '/' },
-    { label: '用户协议', link: '/' },
-    { label: '关于我们', link: '/' },
-    { label: '我是房客', link: '/' },
-    { label: '加入小岛', link: '/' },
-    { label: '帮助中心', link: '/' },
-    { label: '联系我们', link: '/' },
-]
 
 const Footer = () => {
     return (

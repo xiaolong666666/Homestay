@@ -27,7 +27,7 @@ const entranceMessage = [
 const TenantEntrance = () => {
     return (
         <Fragment>
-            <div className={HomeStyle.frame_title_class}>租房分类</div>
+            <div className={HomeStyle.frame_title_class}>房源分类</div>
             <ul className={HomeStyle.tenant_entrance}>
                 {
                     entranceMessage.map(item => {

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from 'umi/router'
+import { reserveSource, systemSource } from '@/constant/notice'
 import { isUserRole } from '@/utils/user'
 
 export default {
@@ -9,82 +10,22 @@ export default {
     state: {
         isLoginFlag: localStorage.getItem('token') != null, // 控制是否登录状态
         isUserTips: false, // 控制鼠标划入用户头像提示框是否显示
-        user: { user_id: localStorage.getItem('user_id') },
+        user: { user_id: localStorage.getItem('user_id') }, // 用户信息
+        reserveSource, // 房源预约
+        systemSource, // 系统通知
         homestay: [], // 我的房源
         homestay_detail: {}, // 特定房源的详情信息
         homestay_like: [],  // 我的点赞房源
         homestay_favorites: [], // 我的收藏房源
+        homestay_reserve: [], // 我的预约房源
         homestay_appraisal: [], // 我的房源评价
     },
 
     reducers: {
-
-        // 在线
-        'onLine'(state, action) {
+        'dump'(state, { payload }) {
             return {
                 ...state,
-                isLoginFlag: true,
-                user: action.user
-            }
-        },
-
-        // 用户操作框
-        'userTips'(state, action) {
-            return {
-                ...state,
-                isUserTips: action.isUserTips
-            }
-        },
-
-        // 注销
-        'logOut'(state, action) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('user_id')
-            router.push('/sign_in')
-            return {
-                ...state,
-                isLoginFlag: false,
-                user: {}
-            }
-        },
-
-        // 获取房源信息
-        'homestay'(state, action) {
-            return {
-                ...state,
-                homestay: action.homestay
-            }
-        },
-
-        // 获取房源详情信息
-        'homestay_detail'(state, action) {
-            return {
-                ...state,
-                homestay_detail: action.homestay_detail
-            }
-        },
-
-        // 获取我的点赞房源
-        'homestay_like'(state, action) {
-            return {
-                ...state,
-                homestay_like: action.homestay_like
-            }
-        },
-
-        // 获取我的收藏房源
-        'homestay_favorites'(state, action) {
-            return {
-                ...state,
-                homestay_favorites: action.homestay_favorites
-            }
-        },
-
-        // 获取我的房源评价
-        'homestay_appraisal'(state, action) {
-            return {
-                ...state,
-                homestay_appraisal: action.homestay_appraisal
+                ...payload,
             }
         },
     },
@@ -113,16 +54,40 @@ export default {
                 const { user_id, user_role } = user
                 localStorage.setItem('user_id', user_id)
                 yield put({
-                    type: 'onLine',
-                    user: {
-                        ...user,
-                        user_role: isUserRole(user_role),
+                    type: 'dump',
+                    payload: {
+                        isLoginFlag: true,
+                        user: {
+                            ...user,
+                            user_role: isUserRole(user_role),
+                        },
                     }
                 })
             } else {
                 localStorage.removeItem('token')
+                localStorage.removeItem('user_id')
+                yield put({
+                    type: 'dump',
+                    payload: {
+                        isLoginFlag: false,
+                        user: {},
+                    },
+                })
                 router.push('/sign_in')
             }
+        },
+
+        // 查询通知中房源预约
+        *'user_system_inform'({ payload }, { call, put }) {
+            const token = localStorage.getItem('token')
+            axios.defaults.headers.Authorization = token
+            const { data: { informSource: reserveSource } } = yield call(axios.post, "/api/user/system_inform")
+            yield put({
+                type: 'dump',
+                payload: {
+                    reserveSource
+                }
+            })
         },
 
         // 修改个人信息
@@ -131,10 +96,13 @@ export default {
             if (code) {
                 const { user_role } = user
                 yield put({
-                    type: 'onLine',
-                    user: {
-                        ...user,
-                        user_role: isUserRole(user_role),
+                    type: 'dump',
+                    payload: {
+                        isLoginFlag: true,
+                        user: {
+                            ...user,
+                            user_role: isUserRole(user_role),
+                        },
                     }
                 })
             }
@@ -145,8 +113,10 @@ export default {
         *'fetch_homestay'({ payload }, { call, put }) {
             const { data: { homestay } } = yield call(axios.post, "/api/user/homestay")
             yield put({
-                type: 'homestay',
-                homestay
+                type: 'dump',
+                payload: {
+                    homestay
+                },
             })
         },
 
@@ -163,8 +133,10 @@ export default {
             axios.defaults.headers.Authorization = token
             const { data: { homestay_detail } } = yield call(axios.get, `/api/user/homestay/detail?homestay_id=${payload}`)
             yield put({
-                type: 'homestay_detail',
-                homestay_detail
+                type: 'dump',
+                payload: {
+                    homestay_detail,
+                },
             })
         },
 
@@ -186,8 +158,10 @@ export default {
         *'fetch_homestay_like'({ payload }, { call, put }) {
             const { data: { homestay_like } } = yield call(axios.post, "/api/user/homestay_like")
             yield put({
-                type: 'homestay_like',
-                homestay_like,
+                type: 'dump',
+                payload: {
+                    homestay_like,
+                },
             })
         },
 
@@ -195,17 +169,39 @@ export default {
         *'fetch_homestay_favorites'({ payload }, { call, put }) {
             const { data: { homestay_favorites } } = yield call(axios.post, "/api/user/homestay_favorites")
             yield put({
-                type: 'homestay_favorites',
-                homestay_favorites,
+                type: 'dump',
+                payload: {
+                    homestay_favorites,
+                },
             })
+        },
+
+        // 查询我的预约房源
+        *'fetch_homestay_reserve'({ payload }, { call, put }) {
+            const { data: { homestay_reserve } } = yield call(axios.post, "/api/user/homestay_reserve")
+            yield put({
+                type: 'dump',
+                payload: {
+                    homestay_reserve,
+                },
+            })
+        },
+
+        // 取消我的预约房源
+        *'reserve_delete'({ payload }, { call }){
+            const token = localStorage.getItem('token')
+            axios.defaults.headers.Authorization = token
+            return yield call(axios.get, `/api/user/homestay/reserve/delete?reserve_id=${payload}`)
         },
 
         // 查询我的房源评价
         *'fetch_homestay_appraisal'({ payload }, { call, put }) {
             const { data: { homestay_appraisal } } = yield call(axios.post, "/api/user/homestay_appraisal")
             yield put({
-                type: 'homestay_appraisal',
-                homestay_appraisal,
+                type: 'dump',
+                payload: {
+                    homestay_appraisal,
+                },
             })
         },
 
@@ -214,6 +210,6 @@ export default {
             const token = localStorage.getItem('token')
             axios.defaults.headers.Authorization = token
             return yield call(axios.get, `/api/user/homestay/comment/delete?comment_id=${payload}`)
-        }
+        },
     },
 }

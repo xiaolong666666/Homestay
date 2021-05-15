@@ -8,16 +8,10 @@ export default {
     },
 
     reducers: {
-        'isMobileBox'(state, action) {
+        'dump'(state, { payload }) {
             return {
                 ...state,
-                isMobileFlag: action.isMobileFlag,
-            }
-        },
-        'isNoticeBox'(state, action) {
-            return {
-                ...state,
-                isNoticeFlag: action.isNoticeFlag,
+                ...payload,
             }
         },
     }

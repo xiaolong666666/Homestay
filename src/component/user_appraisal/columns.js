@@ -22,7 +22,7 @@ const columns = onDelete => [
         width: '20%',
         dataIndex: 'comment_reply',
         key: 'comment_reply',
-        render: (comment_reply) => comment_reply ? comment_reply : '暂无房东回复' 
+        render: (comment_reply) => comment_reply || '暂无房东回复' 
     },
     {
         title: '操作',

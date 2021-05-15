@@ -12,18 +12,23 @@ class Main extends Component {
 
     componentDidMount() {
         window.addEventListener("scroll", throttling(this.listener, 100))
-        this.dispatchFetchHomestay()
     }
 
     componentWillUnmount() {
         window.removeEventListener("scroll", throttling(this.listener, 100))
+        localStorage.removeItem('seek')
     }
 
     // 请求公寓数据
     dispatchFetchHomestay = () => {
-        const { dispatch, homestay_type } = this.props
+        const {
+            dispatch,
+            homestay_type,
+            homestay: { count }
+        } = this.props
         const type = homestay_type.split('/')[2]
-        dispatch({ type: 'homestay/fetchHomestay', payload: { homestay_type: type } })
+        const seek = localStorage.getItem('seek') ? JSON.parse(localStorage.getItem('seek')) : {}
+        dispatch({ type: 'homestay/fetchHomestay', payload: { ...seek, homestay_type: type, count } })
     }
 
     // 监听滚动条的位置请求数据
@@ -46,11 +51,11 @@ class Main extends Component {
                 {
                     homestayDataSource.map(homestay => (<Link
                         to={`${homestay_type}/${homestay.homestay_id}`}
-                        key={homestay.id}
+                        key={homestay.homestay_id}
                         className={HomestayStyle.homestay_wrapper}>
                         <div className={HomestayStyle.homestay_pic}><img src={homestay.propagandaPicture} alt="" /></div>
-                        <div className={HomestayStyle.homestay_pirce_wrapper} />
-                        <div className={HomestayStyle.homestay_pirce}>{`￥${homestay.pirce}`}</div>
+                        <div className={HomestayStyle.homestay_price_wrapper} />
+                        <div className={HomestayStyle.homestay_price}>{`￥${homestay.price}`}</div>
                         <div className={HomestayStyle.homestay_landlord}>
                             <div className={HomestayStyle.homestay_location}>
                                 <h3 title={homestay.homestayName}>{homestay.homestayName}</h3>

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Form, Select, Divider, Checkbox, Button } from 'antd'
 import { createForm } from 'rc-form'
+import { connect } from 'dva'
+import { facilitySource } from '@/constant/homestay'
 import Icon from '@/assets/fonts/iconfont.css'
 import HomestayStyle from './index.less'
 
@@ -19,32 +21,25 @@ const countyDataSource = [
 ]
 
 const priceDataSource = [
-    { value: '[0, 1000)', label: '1000↓' },
-    { value: '[1000, 1200)', label: '1000-1200' },
-    { value: '[1200, 1400)', label: '1200-1400' },
-    { value: '[1400, 1600)', label: '1400-1600' },
-    { value: '[1600, 1800)', label: '1600-1800' },
-    { value: '[1800, 2000)', label: '1800-2000' },
-    { value: '[2000, 3000)', label: '2000↑' },
+    { value: 1, label: '1000↓' },
+    { value: 2, label: '1000-1500' },
+    { value: 3, label: '1500-2000' },
+    { value: 4, label: '2000↑' },
 ]
 
-const facilityDataSource = [
-    { label: '淋浴', value: 'shower' },
-    { label: '空调', value: 'air' },
-    { label: '电视', value: 'tv' },
-    { label: '网络', value: 'wifi' },
-    { label: '允许做饭', value: 'cook' },
-    { label: '暖气', value: 'heating' },
-    { label: '独卫', value: 'toilet' },
-]
-
-const Seek = ({ form: { getFieldDecorator, validateFields } }) => {
+const Seek = ({
+        dispatch,
+        form: { getFieldDecorator, validateFields },
+        homestay_type
+    }) => {
 
     // 搜索房源
     const onSearchHouse = () => {
         validateFields((error, value) => {
             if (!error) {
-                console.log(value);
+                const type = homestay_type.split('/')[2]
+                localStorage.setItem('seek', JSON.stringify({ homestay_type: type, ...value }))
+                dispatch({ type: 'homestay/fetchHomestay', payload: { homestay_type: type, ...value } })
             }
         });
     }
@@ -82,9 +77,9 @@ const Seek = ({ form: { getFieldDecorator, validateFields } }) => {
                 <label htmlFor="facility">设施：</label>
                 {
                     getFieldDecorator('facility', {
-                        initialValue: ['shower', 'tv', 'wifi'],
+                        initialValue: [0, 1, 3],
                     })(
-                        <CheckboxGroup id="facility" options={facilityDataSource} />
+                        <CheckboxGroup id="facility" options={facilitySource} />
                     )
                 }
             </div>
@@ -96,4 +91,4 @@ const Seek = ({ form: { getFieldDecorator, validateFields } }) => {
     );
 };
 
-export default createForm()(Seek);
+export default connect()(createForm()(Seek));

@@ -1,6 +1,3 @@
-.box() {
-    display: inline-block;
-}
 .pointer() {
     cursor: pointer;
 }
@@ -10,64 +7,56 @@
     text-overflow: ellipsis;
 }
 
-.seek_wrapper {
-    width: 100%;
-    height: 60px;
-    margin-bottom: 1em;
-    padding: 9px 18px;
-    border: 1px solid #DDD;
-    background: #FFF;
+.landlord_info {
+    overflow: hidden;
+    width: calc(100% - 10px);
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #F0F0F0;
+    border-radius: 4px;
+    box-shadow:4px 2px 5px #ccc;
+    background: #F4F5F6;
 
-    label {
-        margin-right: 6px;
-        font-weight: bolder;
+    .landlord_avatar {
+        float: left;
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+        border: 2px solid #FF9585;
+        border-radius: 50%;
     }
 
-    .seek_county {
-        .box();
+    .landlord_info_title {
+        overflow: hidden;
 
-        :global {
-            .ant-select {
-                width: 100px;
+        .landlord_nickname {
+            display: inline-block;
+            margin-right: 20px;
+            font-size: 24px;
+            line-height: 40px;
+        }
+
+        .gender {
+            display: inline-block;
+
+            span {
+                margin-top: 4px;
+                margin-right: 4px;
+                font-size: 20px;
             }
-        }  
-    }
 
-    .seek_price {
-        .box();
-
-        :global {
-            .ant-select {
-                font-family: 'kaiti';
-                width: 120px;
-            }
+            .boy { color: #5CBFFE; }
+            .gril { color: #FE55B0; }
         }
     }
 
-    .seek_facility {
-        .box();
-    }
+    .verified {
+        line-height: 40px;
+        font-size: 14px;
 
-    :global {
-        .ant-select-selection--single {
-            height: 40px;
-            .ant-select-selection__rendered {
-                line-height: 40px;
-            }
-        }
-        .ant-divider, .ant-divider-vertical {
-            width: 2px;
-            height: 2.7em;
-            margin: 0 1em;
-        }
-        .ant-btn {
-            height: 38px;
-            padding: 0 16px;
-        }
-    }
-
-    .seek_btn {
-        margin-left: 0.25em;
+        .real { color: #4EB892 }
+        .un { color: #f20; }
     }
 }
 

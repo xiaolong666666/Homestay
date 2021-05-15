@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'umi'
+import { isHomestayType } from '@/utils/homestay'
 import InfoStyle from './index.less'
 
 const House = (props) => {
@@ -7,11 +9,11 @@ const House = (props) => {
         <div className={InfoStyle.house_container}>
             <h4><span className={InfoStyle.nickname}>{nickname}</span>的其他房源</h4>
             {
-                landlord_house.map((item, index) => (
-                    <div key={`key${index}`} className={InfoStyle.house_wrapper}>
-                        <img src={item.pic} alt="" />
-                        <div className={InfoStyle.price}>{`￥${item.price}`}</div>
-                    </div>
+                landlord_house.map(({ homestay_id, homestay_type, homestay_picture, homestay_price }) => (
+                    <Link to={`/homestay/${isHomestayType(homestay_type)}/${homestay_id}`} key={homestay_id} className={InfoStyle.house_wrapper}>
+                        <img src={homestay_picture} alt="" />
+                        <div className={InfoStyle.price}>{`￥${homestay_price}`}</div>
+                    </Link>
                 ))
             }
         </div>

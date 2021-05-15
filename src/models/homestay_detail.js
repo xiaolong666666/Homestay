@@ -15,6 +15,7 @@ export default {
             "https://img.yitianyishu.com/room/coupon/c2588112c760e7eb15480e17ff8e4d8f-1000_660.jpg",
             "https://img.yitianyishu.com/room/coupon/7e5dc09bf6a9dee1b52ebad330813b11-1000_660.jpg",
         ],
+        price: 0,
         like: false,
         like_count: '',
         favorites: false,
@@ -102,45 +103,30 @@ export default {
     },
 
     reducers: {
-        'dump_homestay_detail'(state, action) {
+        'dump'(state, { payload }) {
             return {
                 ...state,
-                picDataSource: action.picDataSource,
-                like: action.like,
-                like_count: action.like_count,
-                favorites: action.favorites,
-                landlord_info: action.landlord_info,
-                landlord_house: action.landlord_house,
+                ...payload,
             }
         },
-        'dump_homestay_comment'(state, action) {
-            return {
-                ...state,
-                commentSource: action.commentSource,
-                total: action.commentSource.length,
-            }
-        },
-        'dump_comment_current'(state, action) {
-            return {
-                ...state,
-                current: action.current
-            }
-        }
     },
 
     effects: {
 
         // 获取房源详情
         *'fetchHomestayDetail'({ payload: { user_id, homestay_id } }, { call, put }) {
-            const { data: { picDataSource, like, like_count, favorites, landlord_info, landlord_house } } = yield call(axios.get, `/api/homestay/homestay_detail?homestay_id=${homestay_id}&user_id=${user_id}`)
+            const { data: { picDataSource, price, like, like_count, favorites, landlord_info, landlord_house } } = yield call(axios.get, `/api/homestay/homestay_detail?homestay_id=${homestay_id}&user_id=${user_id}`)
             yield put({
-                type: 'dump_homestay_detail',
-                picDataSource,
-                like,
-                like_count,
-                favorites,
-                landlord_info,
-                landlord_house,
+                type: 'dump',
+                payload: {
+                    picDataSource,
+                    price,
+                    like,
+                    like_count,
+                    favorites,
+                    landlord_info,
+                    landlord_house,
+                },
             })
         },
 
@@ -148,24 +134,38 @@ export default {
         *'fetchHomestayComment'({ payload: { homestay_id } }, { call, put }) {
             const { data: { commentSource } } = yield call(axios.get, `/api/homestay/homestay_comment?homestay_id=${homestay_id}`)
             yield put ({
-                type: 'dump_homestay_comment',
-                commentSource,
+                type: 'dump',
+                payload: {
+                    commentSource,
+                    total: commentSource.length
+                },
+                
             })
         },
 
         // 提交房源评论
-        *'submitComment'({ payload }, { call, put }) {
+        *'submitComment'({ payload }, { call }) {
             return yield call(axios.post, "/api/homestay/homestay_comment/submit_comment", payload)
         },
 
-        // 点赞或取消点赞
-        *'submitlike'({ payload }, { call, put }) {
+        // 房东房源评论回复
+        *'submitReply'({ payload }, { call }) {
+            return yield call(axios.post, "/api/homestay/homestay_comment/submit_reply", payload)
+        },
+
+        // 点赞或取赞
+        *'submitlike'({ payload }, { call }) {
             return yield call(axios.post, "/api/homestay/homestay_detail/submit_like", payload)
         },
 
-        // 收藏或取消取赞
-        *'submitfavorites'({ payload }, { call, put }) {
+        // 收藏或取藏
+        *'submitfavorites'({ payload }, { call }) {
             return yield call(axios.post, "/api/homestay/homestay_detail/submit_favorites", payload)
+        },
+
+        // 房源预约
+        *'submitReserve'({ payload }, { call, put }) {
+            return yield call(axios.post, "/api/homestay/homestay_detail/submit_reserve", payload)
         }
     },
 }

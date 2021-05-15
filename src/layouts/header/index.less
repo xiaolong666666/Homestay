@@ -9,7 +9,7 @@
     width: 100%;
     height: 56px;
     border-bottom: 1px solid #f0f0f0;
-    background-color: #EFE8E3;
+    background-color: #FF9585;
     z-index: 99;
 }
 
@@ -18,6 +18,9 @@
     width: 1360px;
     height: 56px;
     margin: 0 auto;
+    .homestay_type_select() {
+        color: #FFF;
+    }
 
     .logo {
         float: left;
@@ -31,12 +34,19 @@
     .homestay_type {
         float: left;
         width: 80px;
-        height: 32px;
-        margin: 12px;
+        height: 55px;
+        margin: 0 12px;
         color: #555;
         font-weight: @font-weight;
         text-align: center;
-        line-height: 32px;
+        line-height: 55px;
+        &:hover{
+            .homestay_type_select()
+        }
+    }
+
+    .homestay_type_selected {
+        .homestay_type_select()
     }
 
     .login, .register, .notice, .mobile, .nickname {
@@ -172,7 +182,7 @@
         &::after {
             content: '';
             position: absolute;
-            top: -5%;
+            top: -10px;
             left: 50%;
             border-left: 12px solid transparent;
             border-bottom: 10px solid #fff;
@@ -235,38 +245,44 @@
             border-right: 12px solid transparent;
         }
 
-        ul>li {
-            float: left;
-            border-radius: 4px;
-            padding: 10px 20px 8px;
-            background: #FAFAFA;
-            text-align: center;
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
 
-            h4 {
-                margin-bottom: 4px;
-                color: #333;
-                font-size: 14px;
-            }
+            >li {
+                float: left;
+                border-radius: 4px;
+                padding: 10px 20px 8px;
+                background: #FAFAFA;
+                text-align: center;
 
-            p {
-                color: #999;
-                font-size: 12px;
-            }
+                h4 {
+                    margin-bottom: 4px;
+                    color: #333;
+                    font-size: 14px;
+                }
 
-            .mobile_mask_app {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 16px;
-                background: url('@/assets/imgs/app.png') no-repeat;
-                background-size: contain;
-            }
+                p {
+                    color: #999;
+                    font-size: 12px;
+                }
 
-            .mobile_mask_smaller {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 16px;
-                background: url('@/assets/imgs/smaller.jpg') no-repeat;
-                background-size: contain;
+                .mobile_mask_app {
+                    width: 100px;
+                    height: 100px;
+                    margin-bottom: 16px;
+                    background: url('@/assets/imgs/app.png') no-repeat;
+                    background-size: contain;
+                }
+
+                .mobile_mask_smaller {
+                    width: 100px;
+                    height: 100px;
+                    margin-bottom: 16px;
+                    background: url('@/assets/imgs/smaller.jpg') no-repeat;
+                    background-size: contain;
+                }
             }
         }
         ul>li:first-child {
@@ -314,4 +330,75 @@
     position: absolute;
     margin-left: 4px;
     margin-top: 2px
+}
+
+.notice_wrapper {
+    text-decoration: none;
+    display: block;
+    padding: 12px 24px;
+    &:hover {
+        background: #ffe1dc;
+        color: #666;
+    }
+
+    .notice_title {
+        color: #333;
+        font-size: 16px;
+        margin-bottom: 8px;
+        text-decoration: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        white-space: nowrap;
+    }
+    .notice_content {
+        color: #999;
+        display:-webkit-box;
+        word-break:break-all;
+        -webkit-line-clamp:2;
+        overflow:hidden;
+    }
+}
+
+.system_notice_wrapper {
+    text-decoration: none;
+    display: block;
+    padding: 12px 24px;
+    &:hover {
+        background: #ffe1dc;
+        color: #666;
+    }
+
+    .system_notice_title {
+        overflow: hidden;
+        height: 30px;
+        margin-bottom: 12px;
+
+        img {
+            float: left;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        span {
+            float: right;
+            display: inline-block;
+            line-height: 30px;
+        }
+    }
+
+    p {
+        margin: 0px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        label {
+            display: inline-block;
+            width: 64px;
+            margin-right: 12px;
+        }
+    }
+    
 }

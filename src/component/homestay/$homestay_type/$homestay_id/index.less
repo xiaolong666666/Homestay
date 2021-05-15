@@ -207,6 +207,16 @@
             opacity: 0.8;
         }
     }
+
+    .price {
+        display: inline-block;
+        margin-left: 16px;
+        color: #FF6C5C;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 43px;
+    }
 }
 
 .comment {
@@ -244,6 +254,7 @@
             .user_nickname {
                 margin-right: 4px;
                 color: @primary-color;
+                font-family: 'songti';
                 font-weight: bolder;
             }
             time {
@@ -278,6 +289,20 @@
 
             }
         }
+
+        .reply_wrapper {
+            width: 300px;
+            margin-top: 12px;
+
+            .textarea {
+                font-family: 'Courier New', Courier, monospace;
+                width: 80%;
+            }
+
+            .reply_btn {
+                width: 20%;
+            }
+        }
     }
 
     a.comment_anchor {
@@ -298,6 +323,7 @@
 }
 
 .landlord_container {
+    display: block;
     padding: 20px 16px;
     background: #FFF;
 
@@ -359,6 +385,7 @@
     }
 
     .house_wrapper {
+        display: inline-block;
         position: relative;
         margin-bottom: 16px;
 

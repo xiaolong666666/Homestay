@@ -13,7 +13,6 @@ function BasicLayout(props) {
   const fetchUser = () => {
     const { dispatch } = props
     if (!!localStorage.getItem('token')) {
-      console.log()
       dispatch({ type: 'user/user_sign_check' })
     }
   }
@@ -23,7 +22,7 @@ function BasicLayout(props) {
           {props.children}
         </Fragment>
       : <Fragment>
-          <Header />
+        <Header pathname={pathname} />
           {props.children}
           <Footer />
         </Fragment>

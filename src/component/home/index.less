@@ -157,7 +157,6 @@
 .main {
     overflow: hidden;
     width: 80%;
-    height: 800px;
     margin: 0 auto;
     background: #ccc;
     &>div {
@@ -167,45 +166,29 @@
     .main_left {
         float: left;
         width: 75%;
-        background: red;
     }
 
     .main_right {
         float: right;
         width: 25%;
-        background: chartreuse;
     }
 }
 
 .frame {
     margin: 0 0 16px;
 
-    .frame_title() {
+    .frame_title_class {
         padding: 16px;
         border-radius: 10px;
         color: #fff;
         font-size: 18px;
         font-weight: @font-weight;
         line-height: 24px;
-    }
-
-    .frame_title_class {
-        .frame_title();
-        background-image: radial-gradient(circle at 50% 3%,#f07a56,#f55727);
-    }
-
-    .frame_title_rank {
-        .frame_title();
-        background-image: radial-gradient(circle at 50% -6%,#ffb83d 2%,#f59b00);
-        background-image: radial-gradient(circle at 50% -45%,#53a7f5,#397bee);
+        background-image: radial-gradient(circle at 50% 3%,#f07a56,#FF9585);
     }
 }
 
 .tenant_entrance {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-
     >a {
         position: relative;
         margin: 6px 0;
@@ -251,7 +234,7 @@
 
 .landlord_ranking {
 
-    >li {
+    >.landlord_ranking_item {
         position: relative;
         margin: 6px 0;
         padding: 12px 16px;
@@ -259,7 +242,7 @@
         flex-wrap: nowrap;
         justify-content: space-between;
         border-radius: 8px;
-        background: orchid;
+        background: #BCBCBC;
 
         .landlord_avatar_wrapper0 {
             .landlord_avatar_wrapper_rank(#FF6314)
@@ -316,8 +299,7 @@
 
 .advantage {
     padding: 16px;
-    background: #EFE8E3;
-    background: #3CA0D1;
+    background: #FF6C5C;
 
     .advantage_title {
         width: 80%;

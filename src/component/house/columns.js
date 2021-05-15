@@ -5,7 +5,7 @@ import { isHomestayType, isFacility } from '@/utils/homestay'
 const columns = (onDelete) => [
     {
         title: '公寓名称',
-        width: '20%',
+        width: '15%',
         dataIndex: 'homestay_name',
         key: 'homestay_name',
         render: (homestay_name, { homestay_id, homestay_type }) => 
@@ -14,16 +14,18 @@ const columns = (onDelete) => [
     {
         title: '价格',
         width: '10%',
-        dataIndex: 'homestay_pirce',
-        key: 'homestay_pirce',
+        dataIndex: 'homestay_price',
+        key: 'homestay_price',
     },
     {
         title: '公寓描述',
+        width: '30%',
         dataIndex: 'homestay_recommend',
         key: 'homestay_recommend',
     },
     {
         title: '公寓地址',
+        width: '15%',
         dataIndex: 'homestay_address',
         key: 'homestay_address',
     },

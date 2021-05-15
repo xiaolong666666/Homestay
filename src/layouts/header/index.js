@@ -1,31 +1,55 @@
 import React, { Fragment, useEffect } from 'react'
 import { Tabs } from 'antd'
-import { CSSTransition } from 'react-transition-group'
 import { connect } from 'dva'
 import Link from 'umi/link'
-import HeaderStyle from './index.less'
+import router from 'umi/router'
+import { isEmpty } from 'lodash'
+import { CSSTransition } from 'react-transition-group'
+import ReserveNotice from './ReserveNotice'
+import SystemNotice from './SystemNotice'
 import Icon from '@/assets/fonts/iconfont.css'
+import HeaderStyle from './index.less'
 
 const { TabPane } = Tabs
 
 const Header = ({
-    user: { isLoginFlag, isUserTips, user: { user_id, user_role, user_phone, user_nickname, user_avatar } },
-    header: { isNoticeFlag, isMobileFlag }, dispatch
+    pathname,
+    dispatch,
+    header: { isNoticeFlag, isMobileFlag },
+    user: { isLoginFlag, isUserTips, user: { user_id, user_role, user_phone, user_nickname, user_avatar }, reserveSource, systemSource },
 }) => {
+    const solo = pathname.includes('solo')
+    const double = pathname.includes('double')
+    const multiplayer = pathname.includes('multiplayer')
+    const pathnameArr = pathname.split('/')
+    const type = pathnameArr[pathnameArr.length - 1]
+    const isLandlord = user_role === 'landlord'
+
+    useEffect(() => {
+        if (!isEmpty(user_id)) {
+            dispatch({ type: 'user/user_system_inform' })
+        }
+    }, [dispatch, user_id])
+
+    useEffect(() => {
+        if (type === 'solo' || type === 'double' || type === 'multiplayer') {
+            dispatch({ type: 'homestay/fetchHomestay', payload: { homestay_type: type } })
+        }
+    }, [dispatch, type])
 
     useEffect(() => {
         document.addEventListener('click', () => {
             if (isUserTips) {
-                dispatch({ type: 'user/userTips', isUserTips: false })
+                dispatch({ type: 'user/dump', payload: { isUserTips: false } })
             } else if (isNoticeFlag) {
-                dispatch({ type: 'header/isNoticeBox', isNoticeFlag: false })
+                dispatch({ type: 'header/dump', payload: { isNoticeFlag: false } })
             } else if (isMobileFlag) {
-                dispatch({ type: 'header/isMobileBox', isMobileFlag: false })
+                dispatch({ type: 'header/dump', payload: { isMobileFlag: false } })
             }
         })
         return () => {
             if (isUserTips) {
-                dispatch({ type: 'user/userTips', isUserTips: !isUserTips })
+                dispatch({ type: 'user/dump', payload: { isUserTips: !isUserTips } })
             }
         }
     }, [dispatch, isUserTips, isNoticeFlag, isMobileFlag])
@@ -42,7 +66,6 @@ const Header = ({
         } else {
             return 'information'
         }
-        
     }
 
     // 处理手机号显示
@@ -51,19 +74,19 @@ const Header = ({
     // 处理头像提示框
     const slideFace = (e, isUserTips) => {
         e.nativeEvent.stopImmediatePropagation();   // 阻止原生事件与最外层document上的事件间的冒泡
-        dispatch({ type: 'user/userTips', isUserTips  })
+        dispatch({ type: 'user/dump', payload: { isUserTips }  })
     }
 
     // 处理通知框
     const slideNotice = (e, isNoticeFlag) => {
         e.nativeEvent.stopImmediatePropagation();   // 阻止原生事件与最外层document上的事件间的冒泡
-        dispatch({ type: 'header/isNoticeBox', isNoticeFlag })
+        dispatch({ type: 'header/dump', payload: { isNoticeFlag } })
     }
 
     // 处理手机端
     const slideMobile = (e, isMobileFlag) => {
         e.nativeEvent.stopImmediatePropagation();   // 阻止原生事件与最外层document上的事件间的冒泡
-        dispatch({ type: 'header/isMobileBox', isMobileFlag })
+        dispatch({ type: 'header/dump', payload: { isMobileFlag } })
     }
 
     // 处理通知事件
@@ -73,7 +96,16 @@ const Header = ({
 
     // 退出登录
     const handdleSignout = () => {
-        dispatch({ type: 'user/logOut' })
+        localStorage.removeItem('token')
+        localStorage.removeItem('user_id')
+        dispatch({
+            type: 'user/dump',
+            payload: {
+                isLoginFlag: false,
+                user: {},
+            },
+        })
+        router.push('/sign_in')
     }
 
     return (
@@ -81,9 +113,9 @@ const Header = ({
             <div className={HeaderStyle.main}>
                 {/* logo */}
                 <Link to='/'><div className={HeaderStyle.logo} /></Link>
-                <Link to='/homestay/solo'><div className={HeaderStyle.homestay_type}>单人公寓</div></Link>
-                <Link to='/homestay/double'><div className={HeaderStyle.homestay_type}>双人合租</div></Link>
-                <Link to='/homestay/multiplayer'><div className={HeaderStyle.homestay_type}>多人合租</div></Link>
+                <Link to='/homestay/solo'><div className={`${HeaderStyle.homestay_type} ${solo && HeaderStyle.homestay_type_selected}`}>单人公寓</div></Link>
+                <Link to='/homestay/double'><div className={`${HeaderStyle.homestay_type} ${double && HeaderStyle.homestay_type_selected}`}>双人合租</div></Link>
+                <Link to='/homestay/multiplayer'><div className={`${HeaderStyle.homestay_type} ${multiplayer && HeaderStyle.homestay_type_selected}`}>多人合租</div></Link>
 
                 {/* 手机端 */}
                 <div
@@ -128,7 +160,7 @@ const Header = ({
                                         className={HeaderStyle.user_avatar_operate}
                                     >
                                         <ul>
-                                                <li><Link to={`/user/${user_role}/${user_id}/${activeKey()}`}>个人中心</Link></li>
+                                            <li><Link to={`/user/${user_role}/${user_id}/${activeKey()}`}>个人中心</Link></li>
                                             <li onClick={handdleSignout}>退出登录</li>
                                         </ul>
                                     </div>
@@ -159,20 +191,28 @@ const Header = ({
                         }}
                     >
                         <div className={HeaderStyle.notice_box} onClick={(e) => handleNotice(e)}>
-                            <Tabs defaultActiveKey="1" centered>
-                                <TabPane tab="系统通知" key="1">
-                                    <div className={HeaderStyle.notice_system_null}>
-                                        暂无系统通知
-                                    </div>
+                            <Tabs defaultActiveKey="system" centered>
+                                <TabPane tab="系统通知" key="system">
+                                    {
+                                        !isEmpty(systemSource)
+                                        ? <SystemNotice dataSource={systemSource} />
+                                        : <div className={HeaderStyle.notice_discounts_null}>
+                                            暂无系统通知
+                                        </div>
+                                    }
                                 </TabPane>
-                                <TabPane tab="优惠促销" key="2">
-                                    <div className={HeaderStyle.notice_discounts_null}>
-                                        暂无优惠促销
-                                    </div>
+                                <TabPane tab="房源预约" key="homestay" disabled={!isLandlord}>
+                                    {
+                                        !isEmpty(reserveSource)
+                                            ? <ReserveNotice dataSource={reserveSource} />
+                                            : <div className={HeaderStyle.notice_system_null}>
+                                                暂无房源预约
+                                        </div>
+                                    }
                                 </TabPane>
                             </Tabs>
                             <div className={HeaderStyle.notice_box_divider} />
-                            <div className={HeaderStyle.notice_box_tips}>如需查看所有通知，请前往途家民宿客户端操作</div>
+                            <div className={HeaderStyle.notice_box_tips}>如需查看所有通知，请前往恬逸小岛客户端操作</div>
                         </div>
                     </CSSTransition>
                 }

@@ -68,8 +68,6 @@ class Behavior extends Component {
         } = this.props
         const { homestay_picture, pictured } = this.state
         const token = localStorage.getItem('token')
-        console.log('homestay_picture', homestay_picture)
-        console.log('pictured', pictured)
         return (
             <Modal
                 title={behaviorType === 'issue' ? '发布房源' : '编辑房源'}
@@ -101,7 +99,7 @@ class Behavior extends Component {
                         })(<Radio.Group options={typeSource} />)}
                     </Form.Item>
                     <Form.Item label="价格">
-                        {getFieldDecorator('homestay_pirce', {
+                        {getFieldDecorator('homestay_price', {
                             rules: [
                                 {
                                     required: true,

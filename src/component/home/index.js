@@ -1,16 +1,26 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, memo, useEffect } from 'react'
+import { connect } from 'dva'
 import Banner from './Banner'
 import Main from './Main'
 import Advantage from './Advantage'
 
-const Home = () => {
+const Home = props => {
+    const { dispatch } = props
+    useEffect(() => {
+        dispatch({ type: 'public/fetch_review' })
+    }, [dispatch])
+
     return (
         <Fragment>
             <Banner />
-            <Main />
+            <Main { ...props }/>
             <Advantage />
         </Fragment>
     );
-};
+}
 
-export default Home;
+const mapStateToProps = state => ({
+    public: state.public,
+})
+
+export default connect(mapStateToProps)(memo(Home))

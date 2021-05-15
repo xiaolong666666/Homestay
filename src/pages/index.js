@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'dva'
-import { formatMessage } from 'umi-plugin-locale';
 import Home from '@/component/home'
-import { throttling } from '../utils'
+import Review from '@/component/review'
+import { throttling } from '@/utils'
+import '@/reset.css'
 import Icon from '@/assets/fonts/iconfont.css'
-import Public from './public.less';
-import './../reset.css'
+import Public from './public.less'
 class Index extends Component {
 
   componentDidMount() {
@@ -21,7 +21,7 @@ class Index extends Component {
     const { dispatch, public: { showBackTop } } = this.props
     const scrollT = document.documentElement.scrollTop
     const showFlag = scrollT > 600
-    const dispatchSwitchBackTop = () =>  dispatch({ type: 'public/dump_showBackTop', showBackTop: !showBackTop })
+    const dispatchSwitchBackTop = () => dispatch({ type: 'public/dump', payload: { showBackTop: !showBackTop } })
     showFlag ? !showBackTop && dispatchSwitchBackTop() : showBackTop && dispatchSwitchBackTop()
   }
 
@@ -45,23 +45,16 @@ class Index extends Component {
     return (
       <div className={Public.normal}>
         <Home />
-        <ul>
-          <li>
-            <a href="https://umijs.org/guide/getting-started.html">
-              {formatMessage({ id: 'index.start' })}
-            </a>
-          </li>
-        </ul>
+        <Review {...this.props} />
         {showBackTop && <div className={`${Public.back_top} ${Icon.iconfont}`} title="回到顶部" onClick={this.handdleTop}/>}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     public: state.public,
-  }
-}
+    user: state.user,
+})
 
 export default connect(mapStateToProps)(Index)

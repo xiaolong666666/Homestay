@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useCallback } from 'react'
 import { Modal } from 'antd'
 import Advantage_yz from '@/assets/imgs/advantage/advantage_yz.png'
 import Advantage_bz from '@/assets/imgs/advantage/advantage_bz.png'
@@ -78,26 +78,27 @@ const advantageTipMessage = [
 const Advantage = () => {
     const [showTips, setShowTips] = useState(false)
     const [key, setKey] = useState(0)
+    const onClick = useCallback((index) => {
+        setKey(index); setShowTips(true)
+    }, [setKey, setShowTips])
     return (
-        <Fragment>
-            <div className={HomeStyle.advantage}>
-                <div className={HomeStyle.advantage_title}>为什么在“恬逸小岛”订房？</div>
-                <div className={HomeStyle.advantage_boxs}>
-                    {
-                        advantageMessage.map((item, index) => (
-                            <div
-                                key={`key${index}`}
-                                className={HomeStyle.advantage_box}
-                                onClick={() => { setKey(index); setShowTips(true) }}
-                            >
-                                <div className={HomeStyle.advantage_identification}>
-                                    <img src={item.identification} alt="" />
-                                </div>
-                                <h3>{item.explain}</h3>
+        <div className={HomeStyle.advantage}>
+            <div className={HomeStyle.advantage_title}>为什么在“恬逸小岛”订房？</div>
+            <div className={HomeStyle.advantage_boxs}>
+                {
+                    advantageMessage.map((item, index) => (
+                        <div
+                            key={`key${index}`}
+                            className={HomeStyle.advantage_box}
+                            onClick={() => onClick(index)}
+                        >
+                            <div className={HomeStyle.advantage_identification}>
+                                <img src={item.identification} alt="" />
                             </div>
-                        ))
-                    }
-                </div>
+                            <h3>{item.explain}</h3>
+                        </div>
+                    ))
+                }
             </div>
             <Modal
                 width={700}
@@ -107,14 +108,14 @@ const Advantage = () => {
             >
                 <div className={HomeStyle.advantage_tip}>
                     <div className={HomeStyle.advantage_tip_title}>为什么在恬逸小岛订房</div>
-                    <img src={Advantage_yz_tip} alt=""/>
+                    <img src={advantageTipMessage[key].pic} alt="" />
                     <div className={HomeStyle.advantage_tip_main}>
                         <h4>{advantageMessage[key].explain}</h4>
                         {advantageTipMessage[key].content}
                     </div>
                 </div>
             </Modal>
-        </Fragment>
+        </div>
     );
 };
 

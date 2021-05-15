@@ -12,6 +12,14 @@ class HomestayDetail extends Component {
         this.dispatchFetchHomestayDetail()
     }
 
+    componentDidUpdate(preProps) {
+        const { match: { params: { homestay_id: old_homestay_id } } } = preProps
+        const { match: { params: { homestay_id } } } = this.props
+        if (old_homestay_id !== homestay_id) {
+            this.dispatchFetchHomestayDetail()
+        }
+    }
+
     // 请求公寓详情数据
     dispatchFetchHomestayDetail = () => {
         const {
