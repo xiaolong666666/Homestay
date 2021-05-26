@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { Table, Modal, message } from 'antd'
 import { connect } from 'dva'
 import columns from './columns'
-
 class index extends Component {
 
     componentDidMount() {

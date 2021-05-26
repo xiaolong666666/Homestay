@@ -67,7 +67,7 @@ class PicShow extends Component {
                 <div className={PicShowStyle.bottom_wrapper} onClick={this.onSwitchBottom}/>
                 <div className={PicShowStyle.bottom} onClick={this.onSwitchBottom}/>
             </div>
-        );
+        )
     }
 }
 

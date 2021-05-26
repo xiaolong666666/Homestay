@@ -189,11 +189,9 @@ class CommentComponent extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        loading: state.loading,
-        user: state.user,
-    }
-}
+const mapStateToProps = state => ({
+    loading: state.loading,
+    user: state.user,
+})
 
 export default connect(mapStateToProps)(CommentComponent);
