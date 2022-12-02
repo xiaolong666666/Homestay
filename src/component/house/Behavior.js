@@ -122,7 +122,14 @@ class Behavior extends Component {
                         {getFieldDecorator('homestay_facility')(<Checkbox.Group options={facilitySource} />)}
                     </Form.Item>
                     <Form.Item label="公寓描述">
-                        {getFieldDecorator('homestay_recommend')(<Input.TextArea />)}
+                        {getFieldDecorator('homestay_recommend', {
+                            rules: [
+                                {
+                                    required: true,
+                                    message: '请输入公寓描述!',
+                                },
+                            ],
+                        })(<Input.TextArea />)}
                     </Form.Item>
                     {behaviorType === 'modify' && <Form.Item label="已上传">
                         {pictured.map((item, index) => <div key={`key${index}`} className={behaviorStyle.picture_wrapper}>

@@ -9,7 +9,9 @@ const House = (props) => {
         <div className={InfoStyle.house_container}>
             <h4><span className={InfoStyle.nickname}>{nickname}</span>的其他房源</h4>
             {
-                landlord_house.map(({ homestay_id, homestay_type, homestay_picture, homestay_price }) => (
+                landlord_house
+                .filter((item, index) => (index >= 0 && index < 6))
+                .map(({ homestay_id, homestay_type, homestay_picture, homestay_price }) => (
                     <Link to={`/homestay/${isHomestayType(homestay_type)}/${homestay_id}`} key={homestay_id} className={InfoStyle.house_wrapper}>
                         <img src={homestay_picture} alt="" />
                         <div className={InfoStyle.price}>{`￥${homestay_price}`}</div>

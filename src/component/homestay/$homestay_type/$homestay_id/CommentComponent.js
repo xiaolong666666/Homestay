@@ -127,7 +127,7 @@ class CommentComponent extends Component {
             user: { user: { user_id, user_avatar } },
             homestay_detail: { commentSource, current, pageSize, total, landlord_info: { landlord_id } }
         } = this.props
-        const submitting = this.props.loading.global
+        const submitting = this.props.loading.models.homestay_detail
         const { value } = this.state
         return (
             <Tabs>
